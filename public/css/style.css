@@ -1,0 +1,293 @@
+/* =========================================
+   1. VARIABLES DE COLOR (TEMA OSCURO - POR DEFECTO)
+   ========================================= */
+:root {
+    --rojo-pasion: #D91023; 
+    
+    --bg-principal: #000000;      
+    --bg-secundario: #111111;     
+    --bg-navbar: rgba(0, 0, 0, 0.9); 
+    --texto-principal: #F5F5F5;   
+    --texto-secundario: #AAAAAA;  
+    --borde-color: #333333;       
+    --input-bg: #050505;          
+    --bg-footer: #0a0a0a;         
+    --linea-footer: #333333;      
+}
+
+/* =========================================
+   2. VARIABLES DE COLOR (TEMA CLARO)
+   ========================================= */
+body.modo-claro {
+    --bg-principal: #F8F9FA;      
+    --bg-secundario: #FFFFFF;     
+    --bg-navbar: rgba(255, 255, 255, 0.95); 
+    --texto-principal: #212529;   
+    --texto-secundario: #6C757D;  
+    --borde-color: #DEE2E6;       
+    --input-bg: #FFFFFF;          
+    --bg-footer: #E9ECEF;         
+    --linea-footer: #CED4DA;      
+}
+
+/* =========================================
+   3. ESTILOS BASE
+   ========================================= */
+body { 
+    background-color: var(--bg-principal); 
+    color: var(--texto-principal); 
+    font-family: 'Montserrat', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    overflow-x: hidden; 
+    transition: background-color 0.4s ease, color 0.4s ease; 
+}
+
+h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+
+/* =========================================
+   4. NAVEGACIÓN Y BOTÓN TEMA
+   ========================================= */
+.navbar {
+    background-color: var(--bg-navbar); 
+    padding: 15px 50px; 
+    display: flex; 
+    justify-content: space-between; /* Manda el logo a la izq y redes a la der */
+    align-items: center; 
+    position: fixed; 
+    width: 100%; 
+    top: 0; 
+    z-index: 1000; 
+    box-sizing: border-box; 
+    border-bottom: 1px solid var(--rojo-pasion); 
+    transition: background-color 0.4s ease;
+}
+
+.nav-logo { height: 50px; }
+
+.social-icons { display: flex; align-items: center; gap: 20px; }
+.social-icons a { color: var(--texto-principal); font-size: 20px; transition: 0.3s; }
+.social-icons a:hover { color: var(--rojo-pasion); transform: scale(1.2); }
+
+.btn-tema {
+    background: transparent; border: 2px solid var(--texto-secundario);
+    color: var(--texto-principal); border-radius: 50%; 
+    width: 40px; height: 40px; cursor: pointer; font-size: 16px;
+    transition: 0.3s; display: flex; justify-content: center; align-items: center;
+}
+.btn-tema:hover { border-color: var(--rojo-pasion); color: var(--rojo-pasion); transform: rotate(45deg); }
+
+/* Estilos para los enlaces del nuevo menú CENTRADO PERFECTO */
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    position: absolute; /* Truco para centrarlo exacto respecto a la pantalla */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-links a {
+    color: var(--texto-principal);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1px;
+}
+
+.nav-links a:hover {
+    color: var(--rojo-pasion);
+}
+
+.nav-links .btn-nav {
+    background-color: var(--rojo-pasion);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 4px;
+}
+
+.nav-links .btn-nav:hover {
+    background-color: var(--texto-principal);
+    color: var(--bg-principal);
+}
+
+/* Adaptación para móviles y tablets */
+@media (max-width: 900px) {
+    .navbar {
+        flex-direction: column; 
+        padding: 15px;
+        gap: 15px;
+    }
+    .nav-links {
+        position: static; /* Desactivar el centrado absoluto en móvil */
+        transform: none;
+        flex-wrap: wrap; 
+        justify-content: center;
+        gap: 15px;
+    }
+    .hero {
+        margin-top: 150px; 
+    }
+}
+
+/* =========================================
+   5. SECCIÓN HERO (FOTO DE INICIO)
+   ========================================= */
+.hero {
+    /* rgba al 0.1 para que la sombra negra apenas se note */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), var(--bg-principal)), 
+                url('../images/principal.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    /* Brillo subido al 120% */
+    filter: brightness(1.2); 
+}
+.hero h1 { font-size: 5rem; margin: 0; color: #FFFFFF; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
+.hero p { font-size: 1.5rem; color: #E0E0E0; max-width: 600px; margin-bottom: 40px; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); }
+
+.btn-principal { background-color: var(--rojo-pasion); color: white; font-family: 'Oswald', sans-serif; font-size: 1.2rem; padding: 15px 40px; text-decoration: none; border-radius: 4px; transition: 0.3s; box-shadow: 0 0 15px rgba(217, 16, 35, 0.4); }
+.btn-principal:hover { background-color: var(--texto-principal); color: var(--bg-principal); box-shadow: 0 0 25px rgba(217, 16, 35, 0.8); }
+
+/* =========================================
+   6. MARCADOR DINÁMICO
+   ========================================= */
+.marcador-banner { background-color: var(--rojo-pasion); color: white; padding: 20px; text-align: center; display: flex; justify-content: center; align-items: center; gap: 30px; font-family: 'Oswald', sans-serif; font-size: 1.5rem; flex-wrap: wrap;}
+.escudo-mini { height: 45px; vertical-align: middle; }
+
+/* =========================================
+   7. SECCIONES: VALORES E IDENTIDAD
+   ========================================= */
+.valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; padding: 80px 50px; max-width: 1200px; margin: 0 auto; text-align: center; }
+.valor-caja i { font-size: 3rem; color: var(--rojo-pasion); margin-bottom: 20px; }
+.valor-caja h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--texto-principal); }
+.valor-caja p { color: var(--texto-secundario); line-height: 1.6; }
+
+.identidad-section { padding: 80px 20px; text-align: center; background-color: var(--bg-principal); transition: background-color 0.4s ease; }
+.identidad-section h2 { font-size: 3rem; color: var(--texto-principal); margin-bottom: 10px; }
+.identidad-section p { color: var(--texto-secundario); margin-bottom: 40px; }
+
+.galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+.foto-identidad {
+    width: 100%;
+    height: 400px; 
+    object-fit: cover; 
+    object-position: center; 
+    border-radius: 8px;
+    border: 2px solid var(--borde-color);
+    transition: 0.3s;
+    filter: grayscale(40%); 
+}
+
+.foto-identidad:hover {
+    filter: grayscale(0%);
+    transform: scale(1.02);
+    border-color: var(--rojo-pasion);
+}
+
+/* =========================================
+   8. HORARIOS DE ENTRENAMIENTO
+   ========================================= */
+.horarios-section { background-color: var(--bg-secundario); padding: 70px 20px; text-align: center; border-top: 1px solid var(--borde-color); transition: background-color 0.4s ease; }
+.horarios-container { max-width: 800px; margin: 0 auto; }
+.horarios-container h2 { font-size: 2.5rem; color: var(--texto-principal); margin-bottom: 20px; }
+.horarios-container h2 i { color: var(--rojo-pasion); margin-right: 15px; }
+
+.subtitulo-horario { color: var(--texto-secundario); margin-bottom: 30px; font-size: 1.1rem; }
+.campo-destacado { color: var(--rojo-pasion); font-weight: bold; margin-top: 10px; font-size: 1.1rem; }
+
+.dias-grid { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
+.dia-card { background-color: var(--bg-principal); padding: 30px; border-radius: 8px; border: 1px solid var(--borde-color); flex: 1; min-width: 250px; transition: 0.3s; border-top: 4px solid var(--rojo-pasion); }
+.dia-card:hover { transform: translateY(-5px); border-color: var(--rojo-pasion); box-shadow: 0 5px 15px rgba(217,16,35,0.1); }
+.dia-card h3 { color: var(--rojo-pasion); font-size: 1.8rem; margin-top: 0; margin-bottom: 10px; }
+.hora { font-size: 1.8rem; font-weight: bold; color: var(--texto-principal); margin-bottom: 10px; font-family: 'Oswald', sans-serif; }
+.lugar { color: var(--texto-secundario); font-size: 0.9rem; }
+
+.nota-horario { color: var(--texto-secundario); font-style: italic; margin-top: 20px; font-size: 0.95rem; line-height: 1.5; }
+.nota-horario i { color: var(--rojo-pasion); margin-right: 5px; }
+
+/* =========================================
+   9. FORMULARIO DE RECLUTAMIENTO
+   ========================================= */
+.reclutamiento-section { background-color: var(--bg-secundario); padding: 80px 20px; border-top: 1px solid var(--borde-color); position: relative; transition: background-color 0.4s ease;}
+
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    
+    /* OPACIDAD SUBIDA Y BRILLO EXTRA */
+    opacity: 0.2; 
+    filter: brightness(1.5); 
+    
+    pointer-events: none;
+    z-index: 1;
+}
+/* Un poco más transparente en el modo claro para que no estorbe al leer */
+body.modo-claro .watermark { opacity: 0.08; filter: none; }
+
+.form-container { max-width: 600px; margin: 0 auto; position: relative; z-index: 10; }
+.form-container h2 { font-size: 3rem; text-align: center; color: var(--rojo-pasion); margin-bottom: 10px; }
+.form-container > p { text-align: center; color: var(--texto-secundario); margin-bottom: 40px; }
+
+.form-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--texto-secundario); }
+
+input, textarea { width: 100%; padding: 15px; box-sizing: border-box; background-color: var(--input-bg); border: 1px solid var(--borde-color); color: var(--texto-principal); border-radius: 4px; font-family: 'Montserrat', sans-serif; transition: 0.3s; }
+input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; box-shadow: 0 0 8px rgba(217,16,35,0.2); }
+
+.flex-row { display: flex; gap: 20px; } .flex-row > div { flex: 1; }
+
+.checkbox-experiencia { display: flex; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 20px; }
+.checkbox-experiencia input { width: 20px; height: 20px; cursor: pointer; }
+.checkbox-experiencia label { margin: 0; cursor: pointer; font-size: 1rem; color: var(--texto-principal); }
+
+.btn-submit { background-color: var(--rojo-pasion); color: white; padding: 18px; border: none; font-weight: 700; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1.2rem; margin-top: 10px; font-family: 'Oswald', sans-serif; transition: 0.3s; }
+.btn-submit:hover { background-color: var(--texto-principal); color: var(--bg-principal); }
+
+.alerta-exito { background-color: rgba(74, 222, 128, 0.1); color: #28a745; padding: 20px; border-radius: 4px; margin-bottom: 30px; border: 1px solid #28a745; text-align: center; font-weight: 600;}
+
+/* =========================================
+   10. FOOTER (PIE DE PÁGINA)
+   ========================================= */
+.footer-club { background-color: var(--bg-footer); border-top: 4px solid var(--rojo-pasion); padding: 60px 20px 40px 20px; transition: background-color 0.4s ease; }
+.footer-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
+.footer-col { flex: 1; min-width: 300px; }
+.footer-col h3 { color: var(--texto-principal); font-size: 1.5rem; font-weight: 300; margin-bottom: 20px; letter-spacing: 2px; }
+.footer-col p { color: var(--texto-secundario); line-height: 1.8; margin-bottom: 20px; }
+
+.footer-links { list-style: none; padding: 0; margin: 0; }
+.footer-links li { border-bottom: 1px solid var(--linea-footer); padding: 12px 0; }
+.footer-links li:last-child { border-bottom: none; }
+.footer-links a { color: var(--texto-secundario); text-decoration: none; transition: 0.3s; font-size: 0.95rem; }
+.footer-links a:hover { color: var(--rojo-pasion); }
+.footer-links a.link-destacado { color: var(--rojo-pasion); font-weight: 600; }
+.footer-links a.link-destacado:hover { color: var(--texto-principal); }
+
+.social-footer { display: flex; gap: 15px; }
+.social-footer a { background-color: var(--texto-principal); color: var(--bg-footer); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; text-decoration: none; transition: 0.3s; }
+.social-footer a:hover { background-color: var(--rojo-pasion); color: white; transform: translateY(-3px); }
+
+/* =========================================
+   11. BANNER DE COOKIES
+   ========================================= */
+.cookie-banner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-navbar); color: var(--texto-principal); padding: 15px 30px; display: none; justify-content: space-between; align-items: center; z-index: 9999; box-sizing: border-box; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); border-top: 1px solid var(--rojo-pasion); }
+.cookie-banner p { margin: 0; font-size: 0.9rem; flex: 1; padding-right: 20px; }
+.btn-cookie { background-color: #6c757d; color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+.btn-cookie:hover { background-color: #5a6268; }
+
+@media (max-width: 600px) {
+    .cookie-banner { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
+    .cookie-banner p { padding-right: 0; }
+    .btn-cookie { width: 100%; }
+}
