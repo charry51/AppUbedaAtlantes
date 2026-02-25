@@ -60,7 +60,7 @@ Si deseas clonar y ejecutar este proyecto en tu propia máquina, sigue estos pas
 
 **Francisco Charriel Romero**
 
-* **LinkedIn:** [Pega aquí tu enlace de LinkedIn]
+* **LinkedIn:** www.linkedin.com/in/fcharriel
 * **GitHub:** [https://github.com/charry51](https://github.com/charry51)
 
 *Proyecto desarrollado como solución tecnológica integral para entidades deportivas locales.*
