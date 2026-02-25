@@ -3,7 +3,6 @@
    ========================================= */
 :root {
     --rojo-pasion: #D91023; 
-    
     --bg-principal: #000000;      
     --bg-secundario: #111111;     
     --bg-navbar: rgba(0, 0, 0, 0.9); 
@@ -52,7 +51,7 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
     background-color: var(--bg-navbar); 
     padding: 15px 50px; 
     display: flex; 
-    justify-content: space-between; /* Manda el logo a la izq y redes a la der */
+    justify-content: space-between; 
     align-items: center; 
     position: fixed; 
     width: 100%; 
@@ -64,6 +63,17 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
 }
 
 .nav-logo { height: 50px; }
+
+/* Botón Hamburguesa oculto en PC */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--texto-principal);
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 1001;
+}
 
 .social-icons { display: flex; align-items: center; gap: 20px; }
 .social-icons a { color: var(--texto-principal); font-size: 20px; transition: 0.3s; }
@@ -77,12 +87,11 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
 }
 .btn-tema:hover { border-color: var(--rojo-pasion); color: var(--rojo-pasion); transform: rotate(45deg); }
 
-/* Estilos para los enlaces del nuevo menú CENTRADO PERFECTO */
 .nav-links {
     display: flex;
     gap: 25px;
     align-items: center;
-    position: absolute; /* Truco para centrarlo exacto respecto a la pantalla */
+    position: absolute; 
     left: 50%;
     transform: translateX(-50%);
 }
@@ -114,30 +123,10 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
     color: var(--bg-principal);
 }
 
-/* Adaptación para móviles y tablets */
-@media (max-width: 900px) {
-    .navbar {
-        flex-direction: column; 
-        padding: 15px;
-        gap: 15px;
-    }
-    .nav-links {
-        position: static; /* Desactivar el centrado absoluto en móvil */
-        transform: none;
-        flex-wrap: wrap; 
-        justify-content: center;
-        gap: 15px;
-    }
-    .hero {
-        margin-top: 150px; 
-    }
-}
-
 /* =========================================
    5. SECCIÓN HERO (FOTO DE INICIO)
    ========================================= */
 .hero {
-    /* rgba al 0.1 para que la sombra negra apenas se note */
     background: linear-gradient(to bottom, rgba(0,0,0,0.1), var(--bg-principal)), 
                 url('../images/principal.jpg');
     background-size: cover;
@@ -147,20 +136,50 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
-    /* Brillo subido al 120% */
     filter: brightness(1.2); 
+    box-sizing: border-box;
 }
-.hero h1 { font-size: 5rem; margin: 0; color: #FFFFFF; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
-.hero p { font-size: 1.5rem; color: #E0E0E0; max-width: 600px; margin-bottom: 40px; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); }
 
-.btn-principal { background-color: var(--rojo-pasion); color: white; font-family: 'Oswald', sans-serif; font-size: 1.2rem; padding: 15px 40px; text-decoration: none; border-radius: 4px; transition: 0.3s; box-shadow: 0 0 15px rgba(217, 16, 35, 0.4); }
+.hero h1 { font-size: 5rem; margin: 0; color: #FFFFFF; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); text-align: center; }
+.hero p { font-size: 1.5rem; color: #E0E0E0; max-width: 600px; margin-bottom: 40px; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); text-align: center;}
+
+.btn-principal { 
+    background-color: var(--rojo-pasion); 
+    color: white; 
+    font-family: 'Oswald', sans-serif; 
+    font-size: 1.2rem; 
+    padding: 15px 40px; 
+    text-decoration: none; 
+    border-radius: 4px; 
+    transition: 0.3s; 
+    box-shadow: 0 0 15px rgba(217, 16, 35, 0.4); 
+}
 .btn-principal:hover { background-color: var(--texto-principal); color: var(--bg-principal); box-shadow: 0 0 25px rgba(217, 16, 35, 0.8); }
 
 /* =========================================
    6. MARCADOR DINÁMICO
    ========================================= */
-.marcador-banner { background-color: var(--rojo-pasion); color: white; padding: 20px; text-align: center; display: flex; justify-content: center; align-items: center; gap: 30px; font-family: 'Oswald', sans-serif; font-size: 1.5rem; flex-wrap: wrap;}
+.marcador-banner { 
+    background-color: var(--rojo-pasion); 
+    color: white; 
+    padding: 20px; 
+    text-align: center; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 30px; 
+    font-family: 'Oswald', sans-serif; 
+    font-size: 1.5rem; 
+    flex-wrap: wrap;
+}
+
+.flex-marcador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
 .escudo-mini { height: 45px; vertical-align: middle; }
 
 /* =========================================
@@ -225,15 +244,11 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
     left: 50%;
     transform: translate(-50%, -50%);
     height: 80%;
-    
-    /* OPACIDAD SUBIDA Y BRILLO EXTRA */
     opacity: 0.2; 
     filter: brightness(1.5); 
-    
     pointer-events: none;
     z-index: 1;
 }
-/* Un poco más transparente en el modo claro para que no estorbe al leer */
 body.modo-claro .watermark { opacity: 0.08; filter: none; }
 
 .form-container { max-width: 600px; margin: 0 auto; position: relative; z-index: 10; }
@@ -252,7 +267,7 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; b
 .checkbox-experiencia input { width: 20px; height: 20px; cursor: pointer; }
 .checkbox-experiencia label { margin: 0; cursor: pointer; font-size: 1rem; color: var(--texto-principal); }
 
-.btn-submit { background-color: var(--rojo-pasion); color: white; padding: 18px; border: none; font-weight: 700; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1.2rem; margin-top: 10px; font-family: 'Oswald', sans-serif; transition: 0.3s; }
+.btn-submit { background-color: var(--rojo-pasion); color: white; padding: 18px; border: none; font-weight: 700; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1.2rem; margin-top: 10px; font-family: 'Oswald', sans-serif; transition: 0.3s; box-sizing: border-box; }
 .btn-submit:hover { background-color: var(--texto-principal); color: var(--bg-principal); }
 
 .alerta-exito { background-color: rgba(74, 222, 128, 0.1); color: #28a745; padding: 20px; border-radius: 4px; margin-bottom: 30px; border: 1px solid #28a745; text-align: center; font-weight: 600;}
@@ -286,7 +301,107 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; b
 .btn-cookie { background-color: #6c757d; color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
 .btn-cookie:hover { background-color: #5a6268; }
 
-@media (max-width: 600px) {
+/* =========================================
+   12. ADAPTACIÓN MÓVIL (NUEVO RESPONSIVE)
+   ========================================= */
+@media (max-width: 900px) {
+    /* Barra superior reordenada y limpia */
+    .navbar {
+        padding: 15px 20px;
+    }
+    
+    .social-icons a { display: none; } /* Ocultar Facebook/Insta arriba */
+    
+    .social-icons {
+        order: 2;
+        margin-left: auto; /* Empuja el botón tema y hamburguesa a la derecha */
+        margin-right: 15px;
+    }
+
+    .menu-toggle { 
+        display: block; 
+        order: 3; 
+    }
+
+    /* Desplegable del menú */
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-navbar);
+        padding: 20px 0;
+        border-bottom: 2px solid var(--rojo-pasion);
+        text-align: center;
+        gap: 20px;
+        transform: none; 
+    }
+
+    .nav-links.active { display: flex; } 
+
+    /* Portada (Hero) arreglada */
+    .hero {
+        padding-top: 80px; 
+        box-sizing: border-box; 
+    }
+    .hero h1 { 
+        font-size: 2.5rem; 
+        margin-bottom: 15px;
+        line-height: 1.1;
+    }
+    .hero p { 
+        font-size: 1rem; 
+        padding: 0 20px; 
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    /* Botón Portada adaptado a móvil */
+    .btn-principal {
+        width: 85%; 
+        max-width: 300px; 
+        display: inline-block; 
+        padding: 15px 20px;
+        font-size: 1.1rem; 
+        text-align: center; 
+        box-sizing: border-box;
+    }
+
+    /* Marcador arreglado (en fila, centrado) */
+    .marcador-banner { 
+        padding: 20px 15px;
+        flex-direction: column;
+        gap: 5px; 
+    }
+    
+    .flex-marcador {
+        display: flex;
+        flex-direction: row; /* Fuerza a los escudos y al VS a estar en horizontal */
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin: 10px 0;
+    }
+
+    /* Formulario en columna */
+    .flex-row { flex-direction: column; gap: 0; }
+    
+    /* Botón enviar grande */
+    .btn-submit {
+        width: 100%;
+        display: block;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* Ajustes visuales extra */
+    .footer-container { flex-direction: column; text-align: center; }
+    .social-footer { justify-content: center; }
+    .foto-identidad { height: 250px; }
+    
+    /* Banner Cookies apilado */
     .cookie-banner { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
     .cookie-banner p { padding-right: 0; }
     .btn-cookie { width: 100%; }

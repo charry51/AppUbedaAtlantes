@@ -22,7 +22,11 @@
     <nav class="navbar">
         <a href="#"><img src="{{ asset('images/logo.png') }}" alt="Escudo Atlantes" class="nav-logo"></a>
         
-        <div class="nav-links">
+        <button class="menu-toggle" id="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <div class="nav-links" id="nav-links">
             <a href="#valores">El Club</a>
             <a href="#identidad">Nuestra Piel</a>
             <a href="#horarios">Horarios</a>
@@ -198,13 +202,13 @@
             </div>
         </div>
         <div style="text-align: center; padding: 20px 10px; font-size: 14px; color: #aaa; background-color: #111; margin-top: 40px; border-top: 1px solid #333;">
-    <p style="margin: 0;">
-        Diseño y Desarrollo Web por 
-        <a href="https://www.linkedin.com/in/fcharriel" target="_blank" style="color: #08d7ea; text-decoration: none; font-weight: bold; transition: color 0.3s ease;">
-            Francisco Charriel
-        </a>
-    </p>
-</div>
+            <p style="margin: 0;">
+                Diseño y Desarrollo Web por 
+                <a href="https://www.linkedin.com/in/fcharriel" target="_blank" style="color: #08d7ea; text-decoration: none; font-weight: bold; transition: color 0.3s ease;">
+                    Francisco Charriel
+                </a>
+            </p>
+        </div>
     </footer>
 
     <div id="cookie-banner" class="cookie-banner">
@@ -245,6 +249,25 @@
         btnCookies.addEventListener('click', () => {
             cookieBanner.style.display = 'none';
             localStorage.setItem('cookiesAceptadas', 'true');
+        });
+
+        // --- 3. LÓGICA DEL MENÚ HAMBURGUESA ---
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const iconoMenu = menuToggle.querySelector('i');
+            iconoMenu.classList.toggle('fa-bars');
+            iconoMenu.classList.toggle('fa-xmark');
+        });
+
+        // Cerrar el menú al hacer clic en un enlace (en móviles)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
+            });
         });
     </script>
 </body>
