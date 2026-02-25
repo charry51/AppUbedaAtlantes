@@ -197,6 +197,14 @@
                 </ul>
             </div>
         </div>
+        <div style="text-align: center; padding: 20px 10px; font-size: 14px; color: #aaa; background-color: #111; margin-top: 40px; border-top: 1px solid #333;">
+    <p style="margin: 0;">
+        Diseño y Desarrollo Web por 
+        <a href="https://www.linkedin.com/in/fcharriel" target="_blank" style="color: #08d7ea; text-decoration: none; font-weight: bold; transition: color 0.3s ease;">
+            Francisco Charriel
+        </a>
+    </p>
+</div>
     </footer>
 
     <div id="cookie-banner" class="cookie-banner">
