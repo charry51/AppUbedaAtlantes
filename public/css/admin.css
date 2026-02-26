@@ -1,0 +1,150 @@
+/* =========================================
+   1. VARIABLES Y RESETEO
+   ========================================= */
+:root {
+    --rojo-pasion: #D91023;
+    --bg-principal: #050505;
+    --bg-caja: #111111;
+    --borde-color: #333333;
+    --texto-claro: #ffffff;
+    --texto-gris: #aaaaaa;
+}
+
+*, *::before, *::after { box-sizing: border-box !important; }
+
+html, body { 
+    max-width: 100vw; 
+    overflow-x: hidden; 
+    margin: 0; 
+    padding: 0; 
+    background-color: var(--bg-principal); 
+    color: var(--texto-claro); 
+    font-family: 'Montserrat', sans-serif; 
+}
+
+h1, h2, h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; margin-top: 0; }
+
+/* =========================================
+   2. BARRA SUPERIOR (TOPBAR)
+   ========================================= */
+.topbar { 
+    background-color: var(--bg-caja); 
+    padding: 15px 30px; 
+    border-bottom: 2px solid var(--rojo-pasion); 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 15px;
+}
+.topbar-logo { display: flex; align-items: center; gap: 15px; }
+.topbar img { height: 40px; }
+.topbar h2 { margin: 0; color: var(--texto-claro); font-size: 1.5rem; }
+
+.btn-logout { 
+    background-color: #333; color: white; border: none; 
+    padding: 10px 15px; cursor: pointer; border-radius: 4px; 
+    font-weight: bold; transition: 0.3s; white-space: nowrap;
+}
+.btn-logout:hover { background-color: var(--rojo-pasion); }
+
+/* =========================================
+   3. ESTRUCTURA PRINCIPAL (GRID)
+   ========================================= */
+.admin-grid { 
+    display: grid; 
+    grid-template-columns: 2fr 1fr; 
+    gap: 30px; 
+    padding: 40px; 
+    max-width: 1400px; 
+    margin: 0 auto; 
+    width: 100%; 
+}
+
+.caja-admin { 
+    background-color: var(--bg-caja); 
+    padding: 25px; 
+    border-radius: 8px; 
+    border: 1px solid var(--borde-color); 
+    width: 100%; 
+    overflow: hidden;
+}
+.caja-admin h2 { 
+    color: var(--rojo-pasion); 
+    border-bottom: 1px solid var(--borde-color); 
+    padding-bottom: 10px; margin-bottom: 20px; 
+}
+
+.alerta-exito { 
+    background-color: rgba(74, 222, 128, 0.1); color: #4ade80; 
+    padding: 15px; border-radius: 4px; margin-bottom: 20px; 
+    border: 1px solid #4ade80; text-align: center; font-weight: 600;
+}
+
+/* =========================================
+   4. TABLA RESPONSIVA DE RECLUTAS
+   ========================================= */
+/* Este contenedor es la magia para que la tabla no rompa el móvil */
+.table-responsive { 
+    width: 100%; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 650px; }
+th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid #222; font-size: 0.9rem; vertical-align: middle; }
+th { color: var(--texto-gris); text-transform: uppercase; font-size: 0.8rem; }
+tr:hover { background-color: #1a1a1a; }
+
+.col-mensaje { max-width: 250px; color: #ccc; font-size: 0.85rem; line-height: 1.5; white-space: normal; }
+
+.acciones-flex { display: flex; gap: 15px; align-items: center; }
+.btn-whatsapp { 
+    background-color: #25D366; color: white; padding: 8px 15px; 
+    text-decoration: none; border-radius: 4px; font-weight: bold; 
+    font-size: 1rem; display: inline-flex; justify-content: center; align-items: center;
+}
+.btn-delete { background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 1.2rem; transition: 0.2s; padding: 5px; }
+.btn-delete:hover { color: #fff; transform: scale(1.2); }
+
+/* =========================================
+   5. FORMULARIO DE PARTIDO
+   ========================================= */
+.form-group { margin-bottom: 20px; width: 100%; }
+label { display: block; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; color: var(--texto-gris); }
+
+input[type="text"], input[type="datetime-local"], input[type="file"] { 
+    width: 100%; padding: 12px; background: var(--bg-principal); 
+    border: 1px solid var(--borde-color); color: white; border-radius: 4px; font-family: inherit; 
+}
+input:focus { border-color: var(--rojo-pasion); outline: none; }
+
+.check-group { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.check-group input { width: 22px; height: 22px; flex-shrink: 0; margin: 0; cursor: pointer; }
+.check-group label { margin: 0; color: white; cursor: pointer; font-size: 1rem;}
+
+.btn-submit { 
+    background-color: var(--rojo-pasion); color: white; border: none; 
+    padding: 18px; width: 100%; font-weight: bold; font-family: 'Oswald', sans-serif; 
+    font-size: 1.1rem; cursor: pointer; border-radius: 4px; margin-top: 10px; transition: 0.3s; display: block; 
+}
+.btn-submit:hover { background-color: white; color: var(--rojo-pasion); }
+
+/* =========================================
+   6. ADAPTACIÓN MÓVIL
+   ========================================= */
+@media (max-width: 1100px) {
+    .admin-grid { grid-template-columns: 1fr; padding: 20px; gap: 40px; }
+}
+
+@media (max-width: 600px) {
+    .topbar { flex-direction: column; text-align: center; gap: 20px; padding: 20px 15px; }
+    .topbar-logo { flex-direction: column; gap: 10px; }
+    .btn-logout { width: 100%; padding: 15px; font-size: 1rem; }
+    
+    .admin-grid { padding: 15px; gap: 30px; }
+    .caja-admin { padding: 15px; }
+    .caja-admin h2 { font-size: 1.4rem; }
+    
+    .btn-submit { padding: 15px; }
+}
