@@ -51,6 +51,16 @@ Route::middleware('auth')->group(function () {
     // Guardar el partido desde el panel
     Route::post('/admin/partido', [AdminController::class, 'guardarPartido'])->name('admin.partido.store');
 
-});
+    // --- RUTAS NUEVAS PARA BLOG Y FOTOS ---
+    Route::post('/admin/blog/store', function () {
+        return "Ruta del blog conectada. ¡Lista para programar!";
+    })->name('admin.post.store');
 
-Route::delete('/admin/recluta/{id}', [AdminController::class, 'eliminarRecluta'])->name('admin.recluta.delete');
+    Route::post('/admin/fotos/store', function () {
+        return "Ruta de fotos conectada. ¡Lista para programar!";
+    })->name('admin.photo.store');
+
+    // --- (Movido aquí dentro por seguridad) ---
+    Route::delete('/admin/recluta/{id}', [AdminController::class, 'eliminarRecluta'])->name('admin.recluta.delete');
+
+});

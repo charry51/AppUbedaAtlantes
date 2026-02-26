@@ -127,6 +127,55 @@
             </form>
         </div>
 
+        <div class="caja-admin">
+            <h2><i class="fa-solid fa-newspaper"></i> Publicar en el Blog</h2>
+            
+            <form action="{{ route('admin.post.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label>TÍTULO DE LA NOTICIA</label>
+                    <input type="text" name="title" required placeholder="Ej: Crónica del derbi contra Jaén">
+                </div>
+
+                <div class="form-group">
+                    <label>IMAGEN DE PORTADA</label>
+                    <input type="file" name="image" required accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label>CONTENIDO</label>
+                    <textarea name="content" rows="6" required placeholder="Escribe aquí la noticia..." style="width: 100%; padding: 12px; background: var(--bg-principal); border: 1px solid var(--borde-color); color: white; border-radius: 4px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">PUBLICAR NOTICIA <i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+
+        <div class="caja-admin">
+            <h2><i class="fa-solid fa-camera-retro"></i> Subir Fotos a Galería</h2>
+            
+            <form action="{{ route('admin.photo.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label>TEMPORADA</label>
+                    <input type="text" name="season_name" required placeholder="Ej: Temporada 2025-2026">
+                </div>
+
+                <div class="form-group">
+                    <label>NOMBRE DEL EVENTO / PARTIDO</label>
+                    <input type="text" name="event_name" required placeholder="Ej: Atlantes vs Escoriones">
+                </div>
+
+                <div class="form-group">
+                    <label>SELECCIONAR FOTOS (Puedes elegir varias a la vez)</label>
+                    <input type="file" name="photos[]" multiple required accept="image/*">
+                    <small style="color: var(--texto-gris); display: block; margin-top: 5px;">Mantén pulsado Ctrl (o Cmd en Mac) al elegir fotos para subir varias.</small>
+                </div>
+
+                <button type="submit" class="btn-submit" style="background-color: #08d7ea; color: #000;">SUBIR ÁLBUM <i class="fa-solid fa-cloud-arrow-up"></i></button>
+            </form>
+        </div>
+
     </div>
 
 </body>
