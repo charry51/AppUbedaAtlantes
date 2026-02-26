@@ -213,6 +213,11 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; }
 
 .social-footer { display: flex; gap: 15px; }
 .social-footer a { background-color: var(--texto-principal); color: var(--bg-footer); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; text-decoration: none; transition: 0.3s; }
+.social-footer a:hover { 
+    background-color: var(--rojo-pasion); 
+    color: white; 
+    transform: translateY(-3px); 
+}
 
 /* =========================================
    11. BANNER DE COOKIES
