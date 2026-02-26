@@ -276,3 +276,59 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; }
     .cookie-banner p { padding-right: 0; }
     .btn-cookie { width: 100%; padding: 15px; }
 }
+
+/* =========================================
+   13. PÁGINA DEL BLOG
+   ========================================= */
+.blog-header { 
+    padding: 120px 20px 40px; 
+    text-align: center; 
+    background-color: var(--bg-secundario); 
+    border-bottom: 2px solid var(--rojo-pasion); 
+    width: 100%;
+}
+
+.blog-header p {
+    color: var(--texto-secundario); 
+    max-width: 600px; 
+    margin: 10px auto;
+}
+
+.blog-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px; 
+    max-width: 1200px; 
+    margin: 50px auto; 
+    padding: 0 20px; 
+    min-height: 50vh;
+    width: 100%;
+}
+
+.post-card { 
+    background-color: var(--bg-secundario); 
+    border: 1px solid var(--borde-color); 
+    border-radius: 8px; 
+    overflow: hidden; 
+    transition: 0.3s; 
+}
+
+.post-card:hover { 
+    transform: translateY(-5px); 
+    border-color: var(--rojo-pasion); 
+    box-shadow: 0 5px 15px rgba(217,16,35,0.1); 
+}
+
+.post-img { 
+    width: 100%; 
+    aspect-ratio: 16/9; /* Forzamos una proporción perfecta de foto de TV/Cine */
+    max-height: 450px; /* Le damos margen para crecer, pero sin pasarse */
+    object-fit: cover; 
+    object-position: center 20%; /* Enfoca un poco más arriba para que no corte cabezas */
+}
+.post-content { padding: 25px; }
+.post-date { color: var(--rojo-pasion); font-size: 0.85rem; font-weight: bold; margin-bottom: 10px; display: block; }
+.post-title { font-size: 1.5rem; color: var(--texto-principal); margin: 0 0 15px 0; font-family: 'Oswald', sans-serif; text-transform: uppercase; line-height: 1.2;}
+.post-text { color: var(--texto-secundario); line-height: 1.6; font-size: 0.95rem; white-space: pre-line; margin: 0; }
+
+.blog-empty { grid-column: 1 / -1; text-align: center; padding: 50px; color: var(--texto-secundario); }

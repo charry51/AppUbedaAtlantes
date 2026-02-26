@@ -27,10 +27,11 @@
         </button>
         
         <div class="nav-links" id="nav-links">
-            <a href="#valores">El Club</a>
-            <a href="#identidad">Nuestra Piel</a>
-            <a href="#horarios">Horarios</a>
-            <a href="#contacto" class="btn-nav">¡Apúntate!</a>
+            <a href="{{ url('/') }}#valores">El Club</a>
+            <a href="{{ route('blog') }}">Blog</a>
+            <a href="{{ route('galeria') }}">Galería</a>
+            <a href="{{ url('/') }}#horarios">Horarios</a>
+            <a href="{{ url('/') }}#contacto" class="btn-nav">¡Apúntate!</a>
         </div>
 
         <div class="social-icons">

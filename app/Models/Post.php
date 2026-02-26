@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    //
+    use HasFactory;
+
+    // ESTA ES LA LÍNEA MÁGICA
+    protected $fillable = ['title', 'content', 'image'];
 }
