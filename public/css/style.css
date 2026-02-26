@@ -171,6 +171,21 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
 .hora { font-size: 1.8rem; font-weight: bold; color: var(--texto-principal); margin-bottom: 10px; font-family: 'Oswald', sans-serif; }
 .lugar { color: var(--texto-secundario); font-size: 0.9rem; }
 .nota-horario { color: var(--texto-secundario); font-style: italic; margin-top: 20px; font-size: 0.95rem; }
+/* Efecto hover de las tarjetas de horario */
+.dia-card:hover { 
+    transform: translateY(-5px); 
+    border-color: var(--rojo-pasion); 
+    box-shadow: 0 5px 15px rgba(217, 16, 35, 0.2); 
+}
+
+/* Color rojo para el icono del texto informativo y mejor interlineado */
+.nota-horario {
+    line-height: 1.6;
+}
+.nota-horario i { 
+    color: var(--rojo-pasion); 
+    margin-right: 8px; 
+}
 
 /* =========================================
    9. FORMULARIO DE RECLUTAMIENTO
