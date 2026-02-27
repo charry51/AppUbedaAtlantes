@@ -1,10 +1,8 @@
 # 🏉 Web Oficial - Club de Rugby Úbeda Atlantes
 
-> Plataforma web integral desarrollada a medida para la captación de jugadores, gestión de información y visibilidad del Club de Rugby Úbeda Atlantes.
+Plataforma web integral desarrollada a medida para la captación de jugadores, gestión de información y visibilidad del Club de Rugby Úbeda Atlantes.
 
 Este proyecto no es solo una página informativa ("landing page"), sino una **Aplicación Web Completa** con panel de administración privado, base de datos y sistema de reclutamiento dinámico.
-
----
 
 ## 🚀 Características Principales
 
@@ -12,9 +10,8 @@ Este proyecto no es solo una página informativa ("landing page"), sino una **Ap
 * **Sistema de Reclutamiento (Embudo de conversión):** Formulario de captación conectado a la base de datos para registrar nuevos jugadores según su experiencia.
 * **Panel de Administración (Backend):** Zona privada segura (requiere login) para el "Míster" o la directiva del club.
 * **Gestor de Partidos:** Visualización dinámica del próximo encuentro, donde el administrador puede actualizar fecha, rival y ubicación en tiempo real.
-* **Arquitectura Escalable:** Preparado para futuras implementaciones (Tienda online, Galería histórica por temporadas, Gestión de cuotas).
-
----
+* **CMS Integrado (Blog y Galería):** Gestor de contenidos dinámico para publicar noticias (crónicas de partidos) y un álbum fotográfico filtrable por temporadas y eventos, gestionado 100% desde el panel de control.
+* **Arquitectura Escalable:** Preparado para futuras implementaciones (Tienda online enlazada a pasarela externa, Gestión de cuotas).
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -24,43 +21,37 @@ Este proyecto no es solo una página informativa ("landing page"), sino una **Ap
 * **Autenticación:** Sistema de seguridad y login nativo de Laravel
 * **Control de Versiones:** Git & GitHub
 
----
-
 ## ⚙️ Instalación en local (Para desarrolladores)
 
 Si deseas clonar y ejecutar este proyecto en tu propia máquina, sigue estos pasos:
 
-1. Clona el repositorio:
-   ```bash
-   git clone [https://github.com/charry51/AppUbedaAtlantes.git](https://github.com/charry51/AppUbedaAtlantes.git)
-   ```
-2. Instala las dependencias de PHP:
-   ```bash
-   composer install
-   ```
-3. Configura el entorno:
-   * Copia el archivo `.env.example` y renómbralo a `.env`.
-   * Configura tu conexión a la base de datos dentro del `.env`.
-4. Genera la clave de la aplicación:
-   ```bash
-   php artisan key:generate
-   ```
-5. Ejecuta las migraciones (para crear las tablas en tu base de datos):
-   ```bash
-   php artisan migrate
-   ```
-6. Inicia el servidor local:
-   ```bash
-   php artisan serve
-   ```
+1. **Clona el repositorio:**
+   `git clone https://github.com/charry51/AppUbedaAtlantes.git`
+
+2. **Instala las dependencias de PHP:**
+   `composer install`
+
+3. **Configura el entorno:**
+   Copia el archivo `.env.example` y renómbralo a `.env`. Configura tu conexión a la base de datos dentro del archivo `.env`.
+
+4. **Genera la clave de la aplicación:**
+   `php artisan key:generate`
+
+5. **Ejecuta las migraciones** (para crear las tablas en tu base de datos):
+   `php artisan migrate`
+
+6. **Crea el enlace simbólico para las imágenes** (Necesario para que carguen las fotos del Blog y la Galería):
+   `php artisan storage:link`
+
+7. **Inicia el servidor local:**
+   `php artisan serve`
 
 ---
 
 ## 👨‍💻 Autor
 
 **Francisco Charriel Romero**
-
-* **LinkedIn:** www.linkedin.com/in/fcharriel
+* **LinkedIn:** [www.linkedin.com/in/fcharriel](https://www.linkedin.com/in/fcharriel)
 * **GitHub:** [https://github.com/charry51](https://github.com/charry51)
 
 *Proyecto desarrollado como solución tecnológica integral para entidades deportivas locales.*
