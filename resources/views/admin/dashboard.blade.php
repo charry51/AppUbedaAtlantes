@@ -33,6 +33,16 @@
                 <div class="alerta-exito">{{ session('success') }}</div>
             @endif
 
+            @if ($errors->any())
+            <div style="background-color: #ffebee; border-left: 5px solid var(--rojo-pasion); color: #c62828; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
             @if($contactos->count() > 0)
                 <div class="table-responsive">
                     <table>

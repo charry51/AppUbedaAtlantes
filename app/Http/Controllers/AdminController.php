@@ -88,7 +88,7 @@ public function eliminarRecluta($id)
         $request->validate([
             'season_name' => 'required',
             'event_name' => 'required',
-            'photos.*' => 'required|image|max:2048'
+            'photos.*' => 'required|image|max:51200' // Cada foto máximo 50MB
         ]);
 
         // 2. MAGIA: Buscamos si la Temporada ya existe. Si no, la creamos.
