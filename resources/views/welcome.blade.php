@@ -50,8 +50,7 @@
         </div>
     </nav>
 
-    <section class="hero"
-        style="background: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--bg-principal)), url('{{ asset('images/principal.jpg') }}'); background-size: cover; background-position: center;">
+    <section class="hero" style="--bg-img: url('{{ asset('images/principal.jpg') }}');">
         <h1>ÚBEDA ATLANTES</h1>
         <p>Sangre, sudor y respeto. Bienvenido al club de rugby de Úbeda. Únete a la melé y descubre tu nueva familia.
         </p>
@@ -88,7 +87,7 @@
         @endif
     </div>
 
-    <section class="valores" id="valores">
+    <section class="valores reveal" id="valores">
         <div class="valor-caja">
             <i class="fa-solid fa-handshake-angle"></i>
             <h3>RESPETO</h3>
@@ -109,7 +108,7 @@
         </div>
     </section>
 
-    <section class="identidad-section" id="identidad">
+    <section class="identidad-section reveal" id="identidad">
         <h2>NUESTRA PIEL</h2>
         <p>Conoce al equipo en acción. Más que un club, una hermandad en el campo.</p>
 
@@ -120,7 +119,7 @@
         </div>
     </section>
 
-    <section class="horarios-section" id="horarios">
+    <section class="horarios-section reveal" id="horarios">
         <div class="horarios-container">
             <h2><i class="fa-solid fa-stopwatch"></i> HORARIOS DE ENTRENAMIENTO</h2>
 
@@ -152,7 +151,7 @@
         </div>
     </section>
 
-    <section id="medios" class="medios-section">
+    <section id="medios" class="medios-section reveal">
         <h2 class="section-title">EL CLUB EN LOS MEDIOS</h2>
         <p style="color: var(--texto-secundario); max-width: 600px; margin: 0 auto 40px;">
             Apariciones en televisión, prensa local y reportajes sobre nuestros torneos solidarios.
@@ -188,7 +187,7 @@
         </div>
     </section>
 
-    <section class="reclutamiento-section" id="contacto">
+    <section class="reclutamiento-section reveal" id="contacto">
         <img src="{{ asset('images/logo.png') }}" class="watermark" alt="Fondo">
 
         <div class="form-container">
@@ -331,6 +330,22 @@
                 menuToggle.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
             });
         });
+
+        // --- 4. LÓGICA DE ANIMACIÓN AL HACER SCROLL (REVEAL) ---
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Trigger once to show elements already in view
+        reveal();
     </script>
 </body>
 

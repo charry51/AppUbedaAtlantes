@@ -5,7 +5,7 @@
     --rojo-pasion: #D91023; 
     --bg-principal: #000000;      
     --bg-secundario: #111111;     
-    --bg-navbar: rgba(0, 0, 0, 0.9); 
+    --bg-navbar: rgba(0, 0, 0, 0.65); 
     --texto-principal: #F5F5F5;   
     --texto-secundario: #AAAAAA;  
     --borde-color: #333333;       
@@ -20,7 +20,7 @@
 body.modo-claro {
     --bg-principal: #F8F9FA;      
     --bg-secundario: #FFFFFF;     
-    --bg-navbar: rgba(255, 255, 255, 0.95); 
+    --bg-navbar: rgba(255, 255, 255, 0.75); 
     --texto-principal: #212529;   
     --texto-secundario: #6C757D;  
     --borde-color: #DEE2E6;       
@@ -58,7 +58,9 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
    4. NAVEGACIÓN Y BOTÓN TEMA
    ========================================= */
 .navbar {
-    background-color: var(--bg-navbar); 
+    background-color: var(--bg-navbar);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     padding: 15px 50px; 
     display: flex; 
     justify-content: space-between; 
@@ -68,8 +70,9 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
     max-width: 100vw;
     top: 0; 
     z-index: 1000; 
-    border-bottom: 1px solid var(--rojo-pasion); 
-    transition: background-color 0.4s ease;
+    border-bottom: 1px solid rgba(217, 16, 35, 0.4); 
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nav-logo { height: 50px; }
@@ -108,25 +111,88 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
     letter-spacing: 1px;
 }
 .nav-links a:hover { color: var(--rojo-pasion); }
-.nav-links .btn-nav { background-color: var(--rojo-pasion); color: white; padding: 8px 18px; border-radius: 4px; }
-.nav-links .btn-nav:hover { background-color: var(--texto-principal); color: var(--bg-principal); }
+.nav-links .btn-nav { background: linear-gradient(135deg, var(--rojo-pasion), #ff1e38); color: white; padding: 8px 20px; border-radius: 20px; transition: all 0.3s ease; }
+.nav-links .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(217, 16, 35, 0.4); color: white; }
 
 /* =========================================
    5. SECCIÓN HERO (FOTO DE INICIO)
    ========================================= */
 .hero {
-    background: linear-gradient(to bottom, rgba(0,0,0,0.1), var(--bg-principal)), url('../images/principal.jpg');
-    background-size: cover; background-position: center;
+    position: relative;
     height: 100vh; width: 100%;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    filter: brightness(1.2); 
     padding: 20px; text-align: center;
+    overflow: hidden;
 }
 
-.hero h1 { font-size: 5rem; margin: 0; color: #FFFFFF; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
-.hero p { font-size: 1.5rem; color: #E0E0E0; max-width: 600px; margin-bottom: 40px; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); }
-.btn-principal { background-color: var(--rojo-pasion); color: white; font-family: 'Oswald', sans-serif; font-size: 1.2rem; padding: 15px 40px; text-decoration: none; border-radius: 4px; transition: 0.3s; box-shadow: 0 0 15px rgba(217, 16, 35, 0.4); }
-.btn-principal:hover { background-color: var(--texto-principal); color: var(--bg-principal); }
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--bg-principal)), var(--bg-img, url('../images/principal.jpg'));
+    background-size: cover; background-position: center;
+    z-index: -1;
+    animation: zoomInOut 25s infinite alternate ease-in-out;
+}
+
+@keyframes zoomInOut {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+.hero h1 { 
+    font-size: 5rem; 
+    margin: 0; 
+    color: #FFFFFF; 
+    text-shadow: 3px 3px 15px rgba(0,0,0,0.9);
+    animation: fadeInUp 1s ease-out;
+}
+.hero p { 
+    font-size: 1.5rem; 
+    color: #E0E0E0; 
+    max-width: 600px; 
+    margin-bottom: 40px; 
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.9); 
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-principal { 
+    background: linear-gradient(135deg, var(--rojo-pasion), #ff1e38); 
+    color: white; 
+    font-family: 'Oswald', sans-serif; 
+    font-size: 1.2rem; 
+    padding: 15px 40px; 
+    text-decoration: none; 
+    border-radius: 30px; 
+    transition: all 0.4s ease; 
+    box-shadow: 0 5px 20px rgba(217, 16, 35, 0.4); 
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+.btn-principal::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-25deg);
+    transition: 0.5s;
+    z-index: 1;
+}
+.btn-principal:hover::after {
+    left: 150%;
+}
+.btn-principal:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 25px rgba(217, 16, 35, 0.6); 
+    color: white;
+}
 
 /* =========================================
    6. MARCADOR DINÁMICO
@@ -143,7 +209,20 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
    7. SECCIONES: VALORES E IDENTIDAD
    ========================================= */
 .valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; padding: 80px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
-.valor-caja i { font-size: 3rem; color: var(--rojo-pasion); margin-bottom: 20px; }
+.valor-caja {
+    background: var(--bg-secundario);
+    padding: 40px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--borde-color);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.valor-caja:hover {
+    transform: translateY(-10px);
+    border-color: var(--rojo-pasion);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+.valor-caja i { font-size: 3.5rem; color: var(--rojo-pasion); margin-bottom: 20px; transition: transform 0.3s ease; }
+.valor-caja:hover i { transform: scale(1.1); }
 .valor-caja h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--texto-principal); }
 .valor-caja p { color: var(--texto-secundario); line-height: 1.6; }
 
@@ -173,9 +252,9 @@ h1, h2, h3, .impact-text { font-family: 'Oswald', sans-serif; text-transform: up
 .nota-horario { color: var(--texto-secundario); font-style: italic; margin-top: 20px; font-size: 0.95rem; }
 /* Efecto hover de las tarjetas de horario */
 .dia-card:hover { 
-    transform: translateY(-5px); 
+    transform: translateY(-10px); 
     border-color: var(--rojo-pasion); 
-    box-shadow: 0 5px 15px rgba(217, 16, 35, 0.2); 
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); 
 }
 
 /* Color rojo para el icono del texto informativo y mejor interlineado */
@@ -497,18 +576,18 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; }
 .medio-card { 
     background-color: var(--bg-principal); 
     padding: 30px; 
-    border-radius: 8px; 
+    border-radius: 12px; 
     border: 1px solid var(--borde-color); 
-    transition: 0.3s; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 .medio-card:hover { 
-    transform: translateY(-5px); 
+    transform: translateY(-10px); 
     border-color: var(--rojo-pasion); 
-    box-shadow: 0 5px 15px rgba(217, 16, 35, 0.1); 
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); 
 }
 
 .medio-icon { 
@@ -548,4 +627,20 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; }
 .btn-medio:hover { 
     background-color: var(--rojo-pasion); 
     color: white; 
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(217, 16, 35, 0.3);
+}
+
+/* =========================================
+   17. ANIMACIONES SCROLL REVEAL
+   ========================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
 }
