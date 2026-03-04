@@ -67,6 +67,11 @@
         @endif
     </main>
 
+    <div id="lightbox" class="lightbox-modal">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
     <script>
         const btnTema = document.getElementById('btn-tema');
         const iconoTema = document.getElementById('icono-tema');
@@ -95,6 +100,45 @@
             const iconoMenu = menuToggle.querySelector('i');
             iconoMenu.classList.toggle('fa-bars');
             iconoMenu.classList.toggle('fa-xmark');
+        });
+
+        // =========================================
+        // LÓGICA DEL LIGHTBOX (FOTOS EN GRANDE)
+        // =========================================
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const galeriaImgs = document.querySelectorAll('.grid-fotos img');
+        const closeBtn = document.querySelector('.lightbox-close');
+
+        // 1. Al hacer clic en cualquier foto de la galería
+        galeriaImgs.forEach(img => {
+            img.addEventListener('click', function() {
+                lightbox.style.display = 'flex'; // Mostramos el fondo negro
+                lightboxImg.src = this.src;      // Le pasamos la ruta de la foto exacta
+                document.body.style.overflow = 'hidden'; // Bloqueamos el scroll de la página trasera
+            });
+        });
+
+        // 2. Cerrar al darle a la X
+        closeBtn.addEventListener('click', () => {
+            lightbox.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Devolvemos el scroll
+        });
+
+        // 3. Cerrar al pinchar en cualquier parte del fondo negro (fuera de la foto)
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // 4. Cerrar al pulsar la tecla ESC (Detalle muy pro para el portfolio)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && lightbox.style.display === 'flex') {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
         });
     </script>
 </body>

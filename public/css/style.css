@@ -428,5 +428,50 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; }
     box-shadow: 0 5px 15px rgba(217,16,35,0.2); 
     z-index: 2;
 }
-
 .galeria-empty { text-align: center; padding: 50px; color: var(--texto-secundario); max-width: 800px; margin: 0 auto; }
+
+/* =========================================
+   15. LIGHTBOX (FOTOS EN GRANDE - GALERÍA)
+   ========================================= */
+.lightbox-modal {
+    display: none; /* Oculto por defecto, solo sale al hacer clic */
+    position: fixed;
+    z-index: 9999; /* Por encima de la barra de navegación y todo lo demás */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo negro casi opaco */
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 85vh; /* Que no se salga del alto de la pantalla */
+    border: 3px solid var(--rojo-pasion);
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    animation: zoomIn 0.3s ease; /* Efecto suave de entrada */
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: #f1f1f1;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.lightbox-close:hover {
+    color: var(--rojo-pasion);
+    transform: scale(1.1);
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
