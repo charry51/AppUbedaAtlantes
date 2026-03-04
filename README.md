@@ -6,11 +6,12 @@ Este proyecto no es solo una página informativa ("landing page"), sino una **Ap
 
 ## 🚀 Características Principales
 
-* **Frontend Atractivo y Responsivo:** Diseño adaptado a móviles y escritorio, con modo claro/oscuro dinámico.
+* **Frontend Avanzado:** Diseño Premium con efectos *Glassmorphism*, sombras reactivas, y microanimaciones (*Scroll Reveal*, *Fade In*, *Ken Burns*) usando CSS nativo. Adaptado a móviles y con modo claro/oscuro dinámico.
 * **Sistema de Reclutamiento (Embudo de conversión):** Formulario de captación conectado a la base de datos para registrar nuevos jugadores según su experiencia.
-* **Panel de Administración (Backend):** Zona privada segura (requiere login) para el "Míster" o la directiva del club.
-* **Gestor de Partidos:** Visualización dinámica del próximo encuentro, donde el administrador puede actualizar fecha, rival y ubicación en tiempo real.
-* **CMS Integrado (Blog y Galería):** Gestor de contenidos dinámico para publicar noticias (crónicas de partidos) y un álbum fotográfico filtrable por temporadas y eventos, gestionado 100% desde el panel de control.
+* **Panel de Administración (Backend):** Zona privada segura para la directiva del club.
+* **Gestor de Partidos:** Visualización dinámica del próximo encuentro en el "Hero" de la página.
+* **CMS Integrado (Blog y Galería):** Gestor de contenidos dinámico para publicar noticias y un álbum fotográfico, todo desde el panel de control.
+* **Preparada para Despliegue:** Incluye preconfiguración (`.htaccess`) para despliegues instantáneos en hostings compartidos tradicionales.
 * **Arquitectura Escalable:** Preparado para futuras implementaciones (Tienda online enlazada a pasarela externa, Gestión de cuotas).
 
 ## 🛠️ Tecnologías Utilizadas
