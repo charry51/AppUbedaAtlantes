@@ -188,6 +188,7 @@
                 <div class="social-footer">
                     <a href="https://www.facebook.com/UbedaAtlantesRugbyClub?locale=es_ES" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="https://www.instagram.com/rugbyubedaatlantes/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@ubedaatlantes" target="_blank" title="Canal de YouTube"><i class="fa-brands fa-youtube"></i></a>
                 </div>
             </div>
 

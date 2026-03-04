@@ -72,6 +72,40 @@
         <img class="lightbox-content" id="lightbox-img">
     </div>
 
+    <footer class="footer-club">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>DÓNDE ESTAMOS</h3>
+                <p><strong>Entrenamientos:</strong><br>Polideportivo Municipal Antonio Cruz Sánchez<br>Úbeda, Jaén</p>
+                
+                <div class="social-footer">
+                    <a href="https://www.facebook.com/UbedaAtlantesRugbyClub?locale=es_ES" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/rugbyubedaatlantes/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@ubedaatlantes" target="_blank" title="Canal de YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>CONTACTO Y LEGAL</h3>
+                <p><strong>Teléfono:</strong> 652 02 77 84</p>
+                <ul class="footer-links">
+                    <li><a href="{{ route('privacidad') }}">Política de Privacidad</a></li>
+                    <li><a href="{{ route('aviso-legal') }}">Aviso Legal</a></li>
+                    <li><a href="{{ route('cookies') }}">Política de Cookies</a></li>
+                    <li><a href="{{ route('documentacion') }}" class="link-destacado"><i class="fa-solid fa-file-lines"></i> Documentación del Proyecto</a></li>
+                </ul>
+            </div>
+        </div>
+        <div style="text-align: center; padding: 20px 10px; font-size: 14px; color: #aaa; background-color: #111; margin-top: 40px; border-top: 1px solid #333;">
+            <p style="margin: 0;">
+                Diseño y Desarrollo Web por 
+                <a href="https://www.linkedin.com/in/fcharriel" target="_blank" style="color: #08d7ea; text-decoration: none; font-weight: bold; transition: color 0.3s ease;">
+                    Francisco Charriel
+                </a>
+            </p>
+        </div>
+    </footer>
+
     <script>
         const btnTema = document.getElementById('btn-tema');
         const iconoTema = document.getElementById('icono-tema');
