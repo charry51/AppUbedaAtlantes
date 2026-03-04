@@ -475,3 +475,77 @@ input:focus, textarea:focus { border-color: var(--rojo-pasion); outline: none; }
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
+
+/* =========================================
+   16. SECCIÓN: EN LOS MEDIOS (PRENSA)
+   ========================================= */
+.medios-section { 
+    padding: 80px 20px; 
+    background-color: var(--bg-secundario); 
+    text-align: center; 
+    border-top: 1px solid var(--borde-color);
+}
+
+.medios-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px; 
+    max-width: 1200px; 
+    margin: 40px auto 0; 
+}
+
+.medio-card { 
+    background-color: var(--bg-principal); 
+    padding: 30px; 
+    border-radius: 8px; 
+    border: 1px solid var(--borde-color); 
+    transition: 0.3s; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.medio-card:hover { 
+    transform: translateY(-5px); 
+    border-color: var(--rojo-pasion); 
+    box-shadow: 0 5px 15px rgba(217, 16, 35, 0.1); 
+}
+
+.medio-icon { 
+    font-size: 3rem; 
+    color: var(--rojo-pasion); 
+    margin-bottom: 20px; 
+}
+
+.medio-titulo {
+    color: var(--texto-principal);
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.medio-texto {
+    color: var(--texto-secundario);
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.btn-medio { 
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: transparent; 
+    color: var(--texto-principal); 
+    border: 2px solid var(--rojo-pasion); 
+    border-radius: 4px; 
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: 0.3s; 
+    align-self: center;
+}
+
+.btn-medio:hover { 
+    background-color: var(--rojo-pasion); 
+    color: white; 
+}
