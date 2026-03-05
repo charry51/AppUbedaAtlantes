@@ -1,59 +1,58 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏉 Web Oficial - Club de Rugby Úbeda Atlantes
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Plataforma web integral desarrollada a medida para la captación de jugadores, gestión de información y visibilidad del Club de Rugby Úbeda Atlantes.
 
-## About Laravel
+Este proyecto no es solo una página informativa ("landing page"), sino una **Aplicación Web Completa** con panel de administración privado, base de datos y sistema de reclutamiento dinámico.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Características Principales
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **Frontend Avanzado:** Diseño Premium con efectos *Glassmorphism*, sombras reactivas, y microanimaciones (*Scroll Reveal*, *Fade In*, *Ken Burns*) usando CSS nativo. Adaptado a móviles y con modo claro/oscuro dinámico.
+* **Sistema de Reclutamiento (Embudo de conversión):** Formulario de captación conectado a la base de datos para registrar nuevos jugadores según su experiencia.
+* **Panel de Administración (Backend):** Zona privada segura para la directiva del club.
+* **Gestor de Partidos:** Visualización dinámica del próximo encuentro en el "Hero" de la página.
+* **CMS Integrado (Blog y Galería):** Gestor de contenidos dinámico para publicar noticias y un álbum fotográfico, todo desde el panel de control.
+* **Preparada para Despliegue:** Incluye preconfiguración (`.htaccess`) para despliegues instantáneos en hostings compartidos tradicionales.
+* **Arquitectura Escalable:** Preparado para futuras implementaciones (Tienda online enlazada a pasarela externa, Gestión de cuotas).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Tecnologías Utilizadas
 
-## Learning Laravel
+* **Framework Backend:** Laravel (PHP 8.4+)
+* **Frontend:** Blade, HTML5, CSS3 avanzado (Variables nativas, Flexbox, Grid)
+* **Base de Datos:** MySQL / SQLite
+* **Autenticación:** Sistema de seguridad y login nativo de Laravel
+* **Control de Versiones:** Git & GitHub
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ⚙️ Instalación en local (Para desarrolladores)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Si deseas clonar y ejecutar este proyecto en tu propia máquina, sigue estos pasos:
 
-## Laravel Sponsors
+1. **Clona el repositorio:**
+   `git clone https://github.com/charry51/AppUbedaAtlantes.git`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Instala las dependencias de PHP:**
+   `composer install`
 
-### Premium Partners
+3. **Configura el entorno:**
+   Copia el archivo `.env.example` y renómbralo a `.env`. Configura tu conexión a la base de datos dentro del archivo `.env`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Genera la clave de la aplicación:**
+   `php artisan key:generate`
 
-## Contributing
+5. **Ejecuta las migraciones** (para crear las tablas en tu base de datos):
+   `php artisan migrate`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Crea el enlace simbólico para las imágenes** (Necesario para que carguen las fotos del Blog y la Galería):
+   `php artisan storage:link`
 
-## Code of Conduct
+7. **Inicia el servidor local:**
+   `php artisan serve`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 👨‍💻 Autor
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Francisco Charriel Romero**
+* **LinkedIn:** [www.linkedin.com/in/fcharriel](https://www.linkedin.com/in/fcharriel)
+* **GitHub:** [https://github.com/charry51](https://github.com/charry51)
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+*Proyecto desarrollado como solución tecnológica integral para entidades deportivas locales.*

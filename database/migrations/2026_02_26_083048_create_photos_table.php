@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up()
+    {
+        // TABLA 'photos' (Fotos individuales)
+        // Cada foto subida a un álbum (evento) se registra aquí guardando la ruta del archivo físico.
+        Schema::create('photos', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('event_id')->constrained()->onDelete('cascade'); // Conectado al evento
+            $table->string('image_path');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('photos');
+    }
+};
