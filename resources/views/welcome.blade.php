@@ -4,6 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Básico -->
+    <meta name="description" content="Úbeda Atlantes Rugby Club. Únete al equipo de rugby de Úbeda. Sangre, sudor y respeto. Conoce nuestros horarios, valores y nuestra hermandad.">
+    <meta name="keywords" content="rugby, Úbeda, Jaén, deporte, equipo, atlantes, tercer tiempo, melé, rugby andalucia">
+    <meta name="author" content="Club de Rugby Úbeda Atlantes">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Redes Sociales (Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="Club de Rugby Úbeda Atlantes">
+    <meta property="og:description" content="Sangre, sudor y respeto. Bienvenido al club de rugby de Úbeda. Únete a la melé y descubre tu nueva familia.">
+    <meta property="og:image" content="{{ asset('images/principal.jpg') }}">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Club de Rugby Úbeda Atlantes">
+    <meta name="twitter:description" content="Sangre, sudor y respeto. Bienvenido al club de rugby de Úbeda. Únete a la melé y descubre tu nueva familia.">
+    <meta name="twitter:image" content="{{ asset('images/principal.jpg') }}">
+
+    <!-- Canonical URL para evitar contenido duplicado en Google -->
+    <link rel="canonical" href="{{ url('/') }}">
+
     <title>Club de Rugby Úbeda Atlantes</title>
 
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">

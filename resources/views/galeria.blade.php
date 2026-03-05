@@ -4,6 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Básico -->
+    <meta name="description"
+        content="Galería de fotos del Club de Rugby Úbeda Atlantes. Repasa los mejores momentos, partidos y terceros tiempos del club.">
+    <meta name="keywords"
+        content="fotos rugby, galería rugby úbeda, imágenes equipo rugby, ubeda atlantes fotos, deporte jaen">
+    <meta name="author" content="Club de Rugby Úbeda Atlantes">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Redes Sociales -->
+    <meta property="og:title" content="Galería de Fotos - Úbeda Atlantes">
+    <meta property="og:description"
+        content="Galería de fotos del Club de Rugby Úbeda Atlantes. Repasa los mejores momentos, partidos y terceros tiempos del club.">
+    <meta property="og:image" content="{{ asset('images/principal.jpg') }}">
+    <meta property="og:url" content="{{ route('galeria') }}">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Galería de Fotos - Úbeda Atlantes">
+    <meta name="twitter:description"
+        content="Galería de fotos del Club de Rugby Úbeda Atlantes. Repasa los mejores momentos, partidos y terceros tiempos del club.">
+    <meta name="twitter:image" content="{{ asset('images/principal.jpg') }}">
+
+    <link rel="canonical" href="{{ route('galeria') }}">
+
     <title>Galería - Úbeda Atlantes</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link
