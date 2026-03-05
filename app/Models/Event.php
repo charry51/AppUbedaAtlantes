@@ -9,9 +9,11 @@ class Event extends Model
 {
     use HasFactory;
 
+    // Campos que se pueden rellenar de forma masiva (por ejemplo al crear desde un formulario)
     protected $fillable = ['season_id', 'name', 'date'];
 
-    // Un evento pertenece a una temporada
+    // Relación: Un evento (partido/torneo) pertenece siempre a una única temporada (Season)
+    // Esto nos permite hacer cosas como $evento->season->name
     public function season()
     {
         return $this->belongsTo(Season::class);

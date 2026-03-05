@@ -13,7 +13,8 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Campos que se pueden guardar masivamente al crear un usuario.
+     * Sirve para que no se puedan inyectar campos como 'is_admin' maliciosamente.
      *
      * @var list<string>
      */
@@ -24,7 +25,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Estos campos NUNCA se devolverán cuando se consulte un usuario.
+     * Así evitamos filtrar contraseñas o tokens accidentalmente por una API.
      *
      * @var list<string>
      */
@@ -34,7 +36,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Define de qué tipo deben ser tratados algunos campos.
+     * Por ejemplo, decimos que 'password' siempre debe ser encriptado (hashed).
      *
      * @return array<string, string>
      */
