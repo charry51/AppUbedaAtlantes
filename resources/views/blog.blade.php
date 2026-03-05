@@ -114,11 +114,13 @@
         </div>
         <div
             style="text-align: center; padding: 20px 10px; font-size: 14px; color: #aaa; background-color: #111; margin-top: 40px; border-top: 1px solid #333;">
-            <p style="margin: 0;">
+            <p style="margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 Diseño y Desarrollo Web por
                 <a href="https://www.linkedin.com/in/fcharriel" target="_blank"
-                    style="color: #08d7ea; text-decoration: none; font-weight: bold; transition: color 0.3s ease;">
+                    style="color: #08d7ea; text-decoration: none; font-weight: bold; transition: color 0.3s ease; display: inline-flex; align-items: center; gap: 8px;">
                     Francisco Charriel
+                    <img src="{{ asset('images/Milogo.png') }}" alt="Logo Francisco Charriel"
+                        style="height: 24px; width: auto; object-fit: contain;">
                 </a>
             </p>
         </div>
