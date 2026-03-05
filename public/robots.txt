@@ -5,4 +5,4 @@ Disallow: /register
 Disallow: /password/reset
 Allow: /
 
-Sitemap: https://tudominio.com/sitemap.xml
+Sitemap: https://rugbyubedaatlantes.com/sitemap.xml
