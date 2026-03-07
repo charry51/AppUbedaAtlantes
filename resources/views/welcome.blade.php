@@ -7,8 +7,8 @@
 
     <!-- SEO Básico -->
     <meta name="description"
-        content="Úbeda Atlantes Rugby Club. Únete al equipo de rugby de Úbeda. Sangre, sudor y respeto. Conoce nuestros horarios, valores y nuestra hermandad.">
-    <meta name="keywords" content="rugby, Úbeda, Jaén, deporte, equipo, atlantes, tercer tiempo, melé, rugby andalucia">
+        content="Úbeda Atlantes Rugby Club. Equipos masculino y femenino. Únete al rugby en Úbeda. Sangre, sudor y respeto. Conoce nuestros horarios y valores.">
+    <meta name="keywords" content="rugby, Úbeda, Jaén, deporte, equipo femenino, equipo masculino, atlantes, tercer tiempo, melé, rugby andalucia">
     <meta name="author" content="Club de Rugby Úbeda Atlantes">
     <meta name="robots" content="index, follow">
 
@@ -78,7 +78,7 @@
 
     <section class="hero" style="--bg-img: url('{{ asset('images/principal.jpg') }}');">
         <h1>ÚBEDA ATLANTES</h1>
-        <p>Sangre, sudor y respeto. Bienvenido al club de rugby de Úbeda. Únete a la melé y descubre tu nueva familia.
+        <p>Sangre, sudor y respeto. Bienvenidos al club de rugby de Úbeda. Únete a nuestros equipos masculino y femenino y descubre tu nueva familia.
         </p>
         <a href="#contacto" class="btn-principal">QUIERO PROBAR EL RUGBY</a>
     </section>
@@ -113,6 +113,27 @@
         @endif
     </div>
 
+    @if(isset($upcomingGames) && $upcomingGames->count() > 0)
+    <div class="lista-proximos-banner">
+        <div class="lista-proximos-titulo">OTROS ENCUENTROS PROGRAMADOS</div>
+        <div class="lista-proximos-grid">
+            @foreach($upcomingGames as $game)
+            <div class="proximo-item">
+                <span class="proximo-fecha"><i class="fa-regular fa-calendar"></i> {{ \Carbon\Carbon::parse($game->fecha)->format('d/m/Y') }}</span>
+                <span class="proximo-equipos">
+                    @if($game->es_local)
+                        Atlantes vs {{ $game->rival }}
+                    @else
+                        {{ $game->rival }} vs Atlantes
+                    @endif
+                </span>
+                <span class="proximo-lugar"><i class="fa-solid fa-location-dot"></i> {{ $game->lugar }}</span>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     <section class="valores reveal" id="valores">
         <div class="valor-caja">
             <i class="fa-solid fa-handshake-angle"></i>
@@ -136,12 +157,19 @@
 
     <section class="identidad-section reveal" id="identidad">
         <h2>NUESTRA PIEL</h2>
-        <p>Conoce al equipo en acción. Más que un club, una hermandad en el campo.</p>
+        <p>Conoce a nuestros equipos en acción. Más que un club, somos una gran familia en el campo, con secciones masculina y femenina abiertas a todo el mundo.</p>
 
         <div class="galeria-grid">
             <img src="{{ asset('images/unoimg.jpg') }}" class="foto-identidad" alt="Placaje Atlantes">
             <img src="{{ asset('images/mele.jpg') }}" class="foto-identidad" alt="Melé Atlantes">
             <img src="{{ asset('images/tresimg.jpg') }}" class="foto-identidad" alt="Equipo Atlantes">
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <div style="background: var(--color-primario); color: #fff; padding: 20px; border-radius: 8px; display: inline-block; max-width: 600px;">
+                <h3 style="margin-bottom: 10px; font-family: 'Oswald', sans-serif;"><i class="fa-solid fa-venus-mars"></i> DESARROLLO DEL RUGBY FEMENINO</h3>
+                <p style="font-size: 0.95rem; line-height: 1.5;">Estamos apostando fuertemente por nuestro equipo Senior Femenino. Buscamos jugadoras con o sin experiencia para sumar fuerza, carácter y pasión a nuestro club. ¡El campo te espera!</p>
+            </div>
         </div>
     </section>
 
@@ -242,6 +270,15 @@
                         <label>EDAD</label>
                         <input type="number" name="age" placeholder="Ej: 22">
                     </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>¿EN QUÉ EQUIPO ESTÁS INTERESADO/A?</label>
+                    <select name="team_interest" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px; font-family: inherit;">
+                        <option value="Senior Femenino" style="color: #000;">Senior Femenino</option>
+                        <option value="Senior Masculino" style="color: #000;">Senior Masculino</option>
+                        <option value="Categorías Inferiores" style="color: #000;">Categorías Inferiores (Escuela)</option>
+                        <option value="No lo sé / Otro" selected style="color: #000;">No lo sé / Quiero probar</option>
+                    </select>
                 </div>
                 <div class="form-group checkbox-experiencia">
                     <input type="checkbox" name="has_experience" id="exp">

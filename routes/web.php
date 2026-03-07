@@ -11,13 +11,23 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     // Buscamos el partido cuya fecha sea mayor a "ahora" y cogemos el más cercano
     $nextGame = Game::where('fecha', '>=', now())->orderBy('fecha', 'asc')->first();
-    
-    // Le pasamos ese partido a la vista
-    return view('welcome', compact('nextGame'));
+
+    // Obtenemos los siguientes partidos programados excluyendo el primero
+    $upcomingGames = collect();
+    if ($nextGame) {
+        $upcomingGames = Game::where('fecha', '>=', now())
+            ->where('id', '!=', $nextGame->id)
+            ->orderBy('fecha', 'asc')
+            ->take(3)
+            ->get();
+    }
+
+    // Le pasamos esos partidos a la vista
+    return view('welcome', compact('nextGame', 'upcomingGames'));
 });
 
 // La ruta de contacto que ya teníamos
-Route::post('/contacto', [ContactController::class, 'store'])->name('contacto.store');
+Route::post('/contacto', [ContactController::class , 'store'])->name('contacto.store');
 
 Route::get('/documentacion', function () {
     return view('documentacion');
@@ -57,27 +67,27 @@ Route::get('/galeria', function (Request $request) {
 
 // --- ZONA DE AUTENTICACIÓN (LOGIN) ---
 // Estas rutas muestran el formulario y procesan la entrada
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class , 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class , 'login']);
+Route::post('/logout', [AuthController::class , 'logout'])->name('logout');
 
 use App\Http\Controllers\AdminController;
 
 // --- ZONA PRIVADA (EL VESTUARIO) ---
 Route::middleware('auth')->group(function () {
-    
+
     // Ver el panel
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-    
+    Route::get('/admin', [AdminController::class , 'index'])->name('admin.dashboard');
+
     // Guardar el partido desde el panel
-    Route::post('/admin/partido', [AdminController::class, 'guardarPartido'])->name('admin.partido.store');
+    Route::post('/admin/partido', [AdminController::class , 'guardarPartido'])->name('admin.partido.store');
 
     // --- RUTAS NUEVAS PARA BLOG Y FOTOS ---
-    Route::post('/admin/blog/store', [AdminController::class, 'guardarPost'])->name('admin.post.store');
+    Route::post('/admin/blog/store', [AdminController::class , 'guardarPost'])->name('admin.post.store');
 
-    Route::post('/admin/fotos/store', [AdminController::class, 'guardarFotos'])->name('admin.photo.store');
+    Route::post('/admin/fotos/store', [AdminController::class , 'guardarFotos'])->name('admin.photo.store');
 
     // --- (Movido aquí dentro por seguridad) ---
-    Route::delete('/admin/recluta/{id}', [AdminController::class, 'eliminarRecluta'])->name('admin.recluta.delete');
+    Route::delete('/admin/recluta/{id}', [AdminController::class , 'eliminarRecluta'])->name('admin.recluta.delete');
 
 });

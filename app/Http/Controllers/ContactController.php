@@ -20,8 +20,11 @@ class ContactController extends Controller
         $contact->name = $request->name;
         $contact->phone = $request->phone;
         $contact->age = $request->age;
-        $contact->has_experience = $request->has('has_experience'); // Devuelve true si marcaron la casilla
-        $contact->message = $request->message;
+        $contact->has_experience = $request->has('has_experience'); // Devuelve true si marcaron la casillas
+
+        $team = $request->input('team_interest', 'No especificado');
+        $contact->message = "Interés: " . $team . "\nMensaje:\n" . $request->message;
+
         $contact->save();
 
         // 3. Devolvemos al usuario a la misma página con un mensaje de éxito

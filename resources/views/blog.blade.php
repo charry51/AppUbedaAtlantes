@@ -65,8 +65,17 @@
     </header>
 
     <main class="blog-grid">
+        @php
+            // Definimos los 4 layouts posibles: por defecto, invertido, horizontal y grande
+            $layouts = ['default', 'layout-reverse', 'layout-alt', 'layout-large'];
+        @endphp
+
         @forelse($posts as $post)
-        <article class="post-card">
+        @php
+            // Seleccionamos un layout diferente al azar para cada iteración
+            $randomLayout = $layouts[array_rand($layouts)];
+        @endphp
+        <article class="post-card {{ $randomLayout }}">
             <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="post-img">
             <div class="post-content">
                 <span class="post-date"><i class="fa-regular fa-calendar"></i> {{ $post->created_at->format('d/m/Y')
