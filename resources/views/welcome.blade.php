@@ -32,8 +32,6 @@
 </style>
 @endsection
 
-@section('navbar-full') @endsection
-
 @section('content')
 
     <section class="hero" style="--bg-img: url('{{ asset('images/principal.jpg') }}');">

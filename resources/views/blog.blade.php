@@ -19,10 +19,6 @@
     <link rel="canonical" href="{{ route('blog') }}">
 @endsection
 
-{{-- Marca el enlace "Blog" en la navegación --}}
-@section('nav-blog') style="color: var(--rojo-pasion);" @endsection
-
-@section('navbar-full') @endsection
 
 @section('content')
     <header class="blog-header">

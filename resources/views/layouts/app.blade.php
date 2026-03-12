@@ -25,20 +25,17 @@
             <img src="{{ asset('images/logo.png') }}" alt="Escudo Atlantes" class="nav-logo">
         </a>
 
-        @hasSection('navbar-full')
-            <button class="menu-toggle" id="menu-toggle">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <div class="nav-links" id="nav-links">
-                <a href="{{ url('/') }}#valores">El Club</a>
-                <a href="{{ route('blog') }}" @yield('nav-blog')>Blog</a>
-                <a href="{{ route('galeria') }}" @yield('nav-galeria')>Galería</a>
-                <a href="{{ url('/') }}#horarios">Horarios</a>
-                <a href="{{ url('/') }}#contacto" class="btn-nav">¡Apúntate!</a>
-            </div>
-        @else
-            {{-- Navbar simple para páginas legales y documentación --}}
-        @endif
+        <button class="menu-toggle" id="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+            <a href="{{ url('/') }}#valores">El Club</a>
+            <a href="{{ route('blog') }}" @yield('nav-blog')>Blog</a>
+            <a href="{{ route('galeria') }}" @yield('nav-galeria')>Galería</a>
+            <a href="{{ url('/') }}#horarios">Horarios</a>
+            <a href="{{ url('/') }}#contacto" class="btn-nav">¡Apúntate!</a>
+        </div>
 
         <div class="social-icons">
             <button id="btn-tema" class="btn-tema" title="Cambiar modo claro/oscuro">

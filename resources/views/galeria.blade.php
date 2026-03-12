@@ -19,11 +19,6 @@
     <link rel="canonical" href="{{ route('galeria') }}">
 @endsection
 
-{{-- Marca el enlace "Galería" en la navegación --}}
-@section('nav-galeria') style="color: var(--rojo-pasion);" @endsection
-
-@section('navbar-full') @endsection
-
 @section('content')
     <header class="galeria-header">
         <h1><i class="fa-solid fa-camera-retro" style="color: var(--rojo-pasion);"></i> NUESTRA HISTORIA</h1>
