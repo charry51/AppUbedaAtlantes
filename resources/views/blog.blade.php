@@ -72,10 +72,12 @@
 
         @forelse($posts as $post)
         @php
-            // Seleccionamos un layout diferente al azar para cada iteración
-            $randomLayout = $layouts[array_rand($layouts)];
+            // Seleccionamos un layout de forma determinista según el ID del post
+            // para que cada noticia mantenga siempre el mismo formato
+            $layoutIndex = $post->id % count($layouts);
+            $postLayout = $layouts[$layoutIndex];
         @endphp
-        <article class="post-card {{ $randomLayout }}">
+        <article class="post-card {{ $postLayout }}">
             <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="post-img">
             <div class="post-content">
                 <span class="post-date"><i class="fa-regular fa-calendar"></i> {{ $post->created_at->format('d/m/Y')

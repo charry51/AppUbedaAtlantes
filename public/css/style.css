@@ -1147,6 +1147,9 @@ textarea:focus {
     font-family: 'Oswald', sans-serif;
     text-transform: uppercase;
     line-height: 1.2;
+    /* Forzar que palabras muy largas no rompan la tarjeta */
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 .post-text {
@@ -1155,6 +1158,8 @@ textarea:focus {
     font-size: 0.95rem;
     white-space: pre-line;
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 .blog-empty {
