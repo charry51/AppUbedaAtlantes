@@ -27,15 +27,8 @@
     </header>
 
     <main class="blog-grid">
-        @php
-            $layouts = ['default', 'layout-reverse', 'layout-alt', 'layout-large'];
-        @endphp
-
         @forelse($posts as $post)
-        @php
-            $randomLayout = $layouts[array_rand($layouts)];
-        @endphp
-        <article class="post-card {{ $randomLayout }}">
+        <article class="post-card">
             <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="post-img">
             <div class="post-content">
                 <span class="post-date"><i class="fa-regular fa-calendar"></i> {{ $post->created_at->format('d/m/Y') }}</span>
