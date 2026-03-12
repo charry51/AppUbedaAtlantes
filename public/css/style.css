@@ -1080,9 +1080,10 @@ textarea:focus {
 
     .layout-alt .post-img {
         width: 50%;
-        height: 100%;
+        height: auto;
         max-height: 450px;
-        aspect-ratio: auto;
+        aspect-ratio: 16/9;
+        object-position: center;
     }
 
     .layout-alt .post-content {
@@ -1100,6 +1101,8 @@ textarea:focus {
 
     .layout-large .post-img {
         max-height: 550px;
+        aspect-ratio: 16/9;
+        object-position: center;
     }
 
     .layout-large .post-title {
@@ -1115,6 +1118,7 @@ textarea:focus {
 
 .post-img {
     width: 100%;
+    display: block;
     aspect-ratio: 16/9;
     /* Forzamos una proporción perfecta de foto de TV/Cine */
     max-height: 450px;
