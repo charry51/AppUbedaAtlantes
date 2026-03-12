@@ -120,8 +120,8 @@
 
         <div style="text-align: center; margin-top: 30px;">
             <div style="background: var(--rojo-pasion); color: #fff; padding: 20px; border-radius: 8px; display: inline-block; max-width: 600px;">
-                <h3 style="margin-bottom: 10px; font-family: 'Oswald', sans-serif;"><i class="fa-solid fa-venus-mars"></i> DESARROLLO DEL RUGBY FEMENINO</h3>
-                <p style="font-size: 0.95rem; line-height: 1.5;">Estamos apostando fuertemente por nuestro equipo Senior Femenino. Buscamos jugadoras con o sin experiencia para sumar fuerza, carácter y pasión a nuestro club. ¡El campo te espera!</p>
+                <h3 style="margin-bottom: 10px; font-family: 'Oswald', sans-serif; color: #fff;"><i class="fa-solid fa-venus-mars"></i> DESARROLLO DEL RUGBY FEMENINO</h3>
+                <p style="font-size: 0.95rem; line-height: 1.5; color: #fff;">Estamos apostando fuertemente por nuestro equipo Senior Femenino. Buscamos jugadoras con o sin experiencia para sumar fuerza, carácter y pasión a nuestro club. ¡El campo te espera!</p>
             </div>
         </div>
     </section>
