@@ -119,7 +119,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 30px;">
-            <div style="background: var(--color-primario); color: #fff; padding: 20px; border-radius: 8px; display: inline-block; max-width: 600px;">
+            <div style="background: var(--rojo-pasion); color: #fff; padding: 20px; border-radius: 8px; display: inline-block; max-width: 600px;">
                 <h3 style="margin-bottom: 10px; font-family: 'Oswald', sans-serif;"><i class="fa-solid fa-venus-mars"></i> DESARROLLO DEL RUGBY FEMENINO</h3>
                 <p style="font-size: 0.95rem; line-height: 1.5;">Estamos apostando fuertemente por nuestro equipo Senior Femenino. Buscamos jugadoras con o sin experiencia para sumar fuerza, carácter y pasión a nuestro club. ¡El campo te espera!</p>
             </div>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="form-group" style="margin-bottom: 15px;">
                     <label>¿EN QUÉ EQUIPO ESTÁS INTERESADO/A?</label>
-                    <select name="team_interest" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px; font-family: inherit;">
+                    <select name="team_interest" style="width: 100%; padding: 12px; background: var(--bg-secundario); border: 1px solid var(--borde-color); color: var(--texto-principal); border-radius: 4px; font-family: inherit;">
                         <option value="Senior Femenino" style="color: #000;" {{ old('team_interest') == 'Senior Femenino' ? 'selected' : '' }}>Senior Femenino</option>
                         <option value="Senior Masculino" style="color: #000;" {{ old('team_interest') == 'Senior Masculino' ? 'selected' : '' }}>Senior Masculino</option>
                         <option value="Categorías Inferiores" style="color: #000;" {{ old('team_interest') == 'Categorías Inferiores' ? 'selected' : '' }}>Categorías Inferiores (Escuela)</option>
