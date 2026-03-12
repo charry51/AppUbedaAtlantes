@@ -65,11 +65,6 @@
         </div>
 
         <div class="social-icons">
-            <a href="https://www.facebook.com/UbedaAtlantesRugbyClub?locale=es_ES" target="_blank"><i
-                    class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/rugbyubedaatlantes/" target="_blank"><i
-                    class="fa-brands fa-instagram"></i></a>
-
             <button id="btn-tema" class="btn-tema" title="Cambiar modo claro/oscuro">
                 <i class="fa-solid fa-sun" id="icono-tema"></i>
             </button>
