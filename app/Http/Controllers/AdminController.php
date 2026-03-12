@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Contact;
 use App\Models\Game;
 use App\Models\Post;
@@ -17,26 +18,31 @@ class AdminController extends Controller
     {
         // Traemos todos los novatos, del más reciente al más antiguo
         $contactos = Contact::orderBy('created_at', 'desc')->get();
-        
+
         return view('admin.dashboard', compact('contactos'));
     }
 
     // 2. Guardar un nuevo partido y publicarlo en la web
     public function guardarPartido(Request $request)
     {
+        // Validamos todos los campos antes de guardar
+        $request->validate([
+            'rival'      => 'required|string|max:100',
+            'fecha'      => 'required|date|after:now',
+            'lugar'      => 'required|string|max:200',
+            'rival_logo' => 'nullable|image|max:2048',
+        ]);
+
         $partido = new Game();
-        $partido->rival = $request->rival;
-        $partido->fecha = $request->fecha;
-        $partido->lugar = $request->lugar;
-        // Si el checkbox está marcado, es true (1), si no, false (0)
+        $partido->rival    = $request->rival;
+        $partido->fecha    = $request->fecha;
+        $partido->lugar    = $request->lugar;
         $partido->es_local = $request->has('es_local') ? 1 : 0;
 
-        // Si el míster sube una foto del escudo rival, la guardamos
+        // Si el míster sube una foto del escudo rival, la guardamos en storage/rivales/
         if ($request->hasFile('rival_logo')) {
-            $file = $request->file('rival_logo');
-            $nombreArchivo = 'rival_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $nombreArchivo);
-            $partido->rival_logo = $nombreArchivo;
+            $rutaLogo = $request->file('rival_logo')->store('rivales', 'public');
+            $partido->rival_logo = $rutaLogo;
         }
 
         $partido->save();
@@ -45,24 +51,24 @@ class AdminController extends Controller
     }
 
     // Eliminar un recluta de la lista
-public function eliminarRecluta($id)
-{
-    $recluta = Contact::findOrFail($id);
-    $recluta->delete();
+    public function eliminarRecluta($id)
+    {
+        $recluta = Contact::findOrFail($id);
+        $recluta->delete();
 
-    return back()->with('success', 'Recluta gestionado y eliminado de la lista.');
-}
+        return back()->with('success', 'Recluta gestionado y eliminado de la lista.');
+    }
 
-// ----------------------------------------------------
+    // ----------------------------------------------------
     // LÓGICA DEL BLOG
     // ----------------------------------------------------
     public function guardarPost(Request $request)
     {
         // 1. Validamos que nos mandan todo lo necesario
         $request->validate([
-            'title' => 'required',
+            'title'   => 'required|string|max:255',
             'content' => 'required',
-            'image' => 'required|image|max:2048' // Máximo 2MB
+            'image'   => 'required|image|max:2048', // Máximo 2MB
         ]);
 
         // 2. Guardamos la foto en la carpeta public/storage/blog
@@ -70,9 +76,9 @@ public function eliminarRecluta($id)
 
         // 3. Creamos el registro en la base de datos
         Post::create([
-            'title' => $request->title,
+            'title'   => $request->title,
             'content' => $request->content,
-            'image' => $rutaImagen
+            'image'   => $rutaImagen,
         ]);
 
         // 4. Devolvemos al Míster a su panel con un mensaje de éxito
@@ -86,32 +92,29 @@ public function eliminarRecluta($id)
     {
         // 1. Validamos los datos y el array de fotos
         $request->validate([
-            'season_name' => 'required',
-            'event_name' => 'required',
-            'photos.*' => 'required|image|max:51200' // Cada foto máximo 50MB
+            'season_name' => 'required|string|max:100',
+            'event_name'  => 'required|string|max:200',
+            'photos.*'    => 'required|image|max:51200', // Cada foto máximo 50MB
         ]);
 
-        // 2. MAGIA: Buscamos si la Temporada ya existe. Si no, la creamos.
+        // 2. Buscamos si la Temporada ya existe. Si no, la creamos.
         $temporada = Season::firstOrCreate([
-            'name' => $request->season_name
+            'name' => $request->season_name,
         ]);
 
-        // 3. Buscamos o creamos el Evento (partido) dentro de esa temporada concreta
+        // 3. Buscamos o creamos el Evento dentro de esa temporada
         $evento = Event::firstOrCreate([
             'season_id' => $temporada->id,
-            'name' => $request->event_name
+            'name'      => $request->event_name,
         ]);
 
         // 4. Bucle para subir todas las fotos seleccionadas
-        if($request->hasFile('photos')) {
-            foreach($request->file('photos') as $foto) {
-                // Guardamos cada foto en public/storage/galeria
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $foto) {
                 $rutaFoto = $foto->store('galeria', 'public');
-                
-                // Conectamos la foto con su evento en la base de datos
                 Photo::create([
-                    'event_id' => $evento->id,
-                    'image_path' => $rutaFoto
+                    'event_id'   => $evento->id,
+                    'image_path' => $rutaFoto,
                 ]);
             }
         }

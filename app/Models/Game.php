@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-// Un modelo en Laravel representa una tabla en la base de datos.
-// En este caso, 'Game' se conecta automáticamente a la tabla 'games'.
-// Aquí puedes definir relaciones, campos rellenables (fillable), etc.
+    // 'Game' se conecta automáticamente a la tabla 'games'.
+    // $fillable protege contra asignación masiva maliciosa.
+    protected $fillable = [
+        'rival',
+        'fecha',
+        'lugar',
+        'es_local',
+        'rival_logo',
+    ];
 }

@@ -1,83 +1,21 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentación - Úbeda Atlantes</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Oswald:wght@500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <style>
-        .doc-container {
-            max-width: 800px;
-            margin: 120px auto 50px auto;
-            padding: 40px;
-            background-color: var(--bg-secundario);
-            border-radius: 8px;
-            border: 1px solid var(--borde-color);
-        }
+@section('title', 'Manual de Usuario - Úbeda Atlantes')
 
-        .doc-container h1 {
-            color: var(--rojo-pasion);
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 10px;
-        }
+@section('styles')
+<style>
+    .doc-container { max-width: 800px; margin: 120px auto 50px auto; padding: 40px; background-color: var(--bg-secundario); border-radius: 8px; border: 1px solid var(--borde-color); }
+    .doc-container h1 { color: var(--rojo-pasion); font-size: 2.5rem; text-align: center; margin-bottom: 10px; }
+    .doc-container h2 { color: var(--texto-principal); font-size: 1.8rem; margin-top: 40px; border-bottom: 2px solid var(--rojo-pasion); padding-bottom: 10px; }
+    .doc-container h3 { color: var(--texto-principal); margin-top: 30px; }
+    .doc-container p, .doc-container li { line-height: 1.8; color: var(--texto-secundario); margin-bottom: 15px; }
+    .doc-container ul, .doc-container ol { margin-bottom: 20px; padding-left: 20px; }
+    .btn-volver { display: inline-block; margin-bottom: 20px; color: var(--rojo-pasion); text-decoration: none; font-weight: bold; }
+    .btn-volver:hover { text-decoration: underline; }
+</style>
+@endsection
 
-        .doc-container h2 {
-            color: var(--texto-principal);
-            font-size: 1.8rem;
-            margin-top: 40px;
-            border-bottom: 2px solid var(--rojo-pasion);
-            padding-bottom: 10px;
-        }
-
-        .doc-container h3 {
-            color: var(--texto-principal);
-            margin-top: 30px;
-        }
-
-        .doc-container p,
-        .doc-container li {
-            line-height: 1.8;
-            color: var(--texto-secundario);
-            margin-bottom: 15px;
-        }
-
-        .doc-container ul,
-        .doc-container ol {
-            margin-bottom: 20px;
-            padding-left: 20px;
-        }
-
-        .btn-volver {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: var(--rojo-pasion);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .btn-volver:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-
-<body>
-
-    <nav class="navbar">
-        <a href="{{ url('/') }}"><img src="{{ asset('images/logo.png') }}" alt="Escudo Atlantes" class="nav-logo"></a>
-        <div class="social-icons">
-            <button id="btn-tema" class="btn-tema" title="Cambiar modo claro/oscuro"><i class="fa-solid fa-sun"
-                    id="icono-tema"></i></button>
-        </div>
-    </nav>
-
+@section('content')
     <div class="doc-container">
         <a href="{{ url('/') }}" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Volver a la web</a>
 
@@ -184,17 +122,4 @@
 
         <p style="text-align: center; font-style: italic; color: var(--texto-secundario);">Diseñado y desarrollado para potenciar y dar a conocer el rugby en la provincia de Jaén.</p>
     </div>
-
-    <script>
-        // Lógica del modo oscuro para que ione aquí
-        const btnTema = document.getElementById('btn-tema'); const iconoTema = document.getElementById('icono-tema'); const cuerpoWeb = document.body;
-        if (localStorage.getItem('temaElegido') === 'claro') { cuerpoWeb.classList.add('modo-claro'); iconoTema.classList.replace('fa-sun', 'fa-moon'); }
-        btnTema.addEventListener('click', () => {
-            cuerpoWeb.classList.toggle('modo-claro');
-            if (cuerpoWeb.classList.contains('modo-claro')) { localStorage.setItem('temaElegido', 'claro'); iconoTema.classList.replace('fa-sun', 'fa-moon'); } 
-            else { localStorage.setItem('temaElegido','oscuro'); iconoTema.classList.replace('fa-moon', 'fa-sun'); }
-        });
-    </script>
-</body>
-
-</html>
+@endsection

@@ -1,30 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\ContactController;
-use App\Models\Game; // <-- IMPORTANTE AÑADIR ESTO
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Models\Post;
 use App\Models\Season;
-use Illuminate\Http\Request;
 
-// Ruta principal modificada
-Route::get('/', function () {
-    // Buscamos el partido cuya fecha sea mayor a "ahora" y cogemos el más cercano
-    $nextGame = Game::where('fecha', '>=', now())->orderBy('fecha', 'asc')->first();
-
-    // Obtenemos los siguientes partidos programados excluyendo el primero
-    $upcomingGames = collect();
-    if ($nextGame) {
-        $upcomingGames = Game::where('fecha', '>=', now())
-            ->where('id', '!=', $nextGame->id)
-            ->orderBy('fecha', 'asc')
-            ->take(3)
-            ->get();
-    }
-
-    // Le pasamos esos partidos a la vista
-    return view('welcome', compact('nextGame', 'upcomingGames'));
-});
+// Ruta principal - lógica delegada al HomeController (patrón MVC)
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // La ruta de contacto que ya teníamos
 Route::post('/contacto', [ContactController::class , 'store'])->name('contacto.store');
@@ -45,12 +31,12 @@ Route::get('/cookies', function () {
     return view('cookies');
 })->name('cookies');
 
-use App\Http\Controllers\AuthController;
+// --- ZONA DE AUTENTICACIÓN (LOGIN) ---
 
 // --- RUTAS PÚBLICAS PARA EL BLOG Y LA GALERÍA ---
 Route::get('/blog', function () {
-    // Traemos todas las noticias ordenadas de más nuevas a más viejas
-    $posts = Post::orderBy('created_at', 'desc')->get();
+    // Traemos las noticias paginadas (6 por página)
+    $posts = Post::orderBy('created_at', 'desc')->paginate(6);
     return view('blog', compact('posts'));
 })->name('blog');
 
@@ -71,7 +57,7 @@ Route::get('/login', [AuthController::class , 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class , 'login']);
 Route::post('/logout', [AuthController::class , 'logout'])->name('logout');
 
-use App\Http\Controllers\AdminController;
+
 
 // --- ZONA PRIVADA (EL VESTUARIO) ---
 Route::middleware('auth')->group(function () {
