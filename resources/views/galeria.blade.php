@@ -41,8 +41,15 @@
         @if($temporadaActiva && $temporadaActiva->events->count() > 0)
         @foreach($temporadaActiva->events as $evento)
         <div class="evento-container">
-            <h2 class="evento-titulo"><i class="fa-solid fa-trophy"></i> {{ $evento->name }}</h2>
-            <div class="grid-fotos">
+            <h2 class="evento-titulo">
+                <i class="fa-solid fa-trophy"></i> {{ $evento->name }}
+            </h2>
+            <button type="button"
+                    class="btn-toggle-fotos"
+                    data-target="evento-{{ $evento->id }}">
+                VER FOTOS DEL EVENTO
+            </button>
+            <div class="grid-fotos evento-fotos" id="evento-{{ $evento->id }}">
                 @foreach($evento->photos as $foto)
                 <img src="{{ asset('storage/' . $foto->image_path) }}" alt="Foto de {{ $evento->name }}" loading="lazy">
                 @endforeach
@@ -66,6 +73,25 @@
 
 @section('scripts')
 <script>
+    // DESPLEGABLE DE FOTOS POR EVENTO
+    const toggleButtons = document.querySelectorAll('.btn-toggle-fotos');
+
+    toggleButtons.forEach(btn => {
+        const targetId = btn.dataset.target;
+        const target = document.getElementById(targetId);
+
+        if (!target) return;
+
+        // Inicialmente colapsado
+        target.classList.remove('abierto');
+
+        btn.addEventListener('click', () => {
+            const isOpen = target.classList.toggle('abierto');
+            btn.classList.toggle('abierto', isOpen);
+            btn.textContent = isOpen ? 'OCULTAR FOTOS DEL EVENTO' : 'VER FOTOS DEL EVENTO';
+        });
+    });
+
     // LÓGICA DEL LIGHTBOX (FOTOS EN GRANDE)
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');

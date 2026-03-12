@@ -1218,13 +1218,58 @@ textarea:focus {
     color: var(--rojo-pasion);
     border-bottom: 2px solid var(--borde-color);
     padding-bottom: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     font-size: 2rem;
+}
+
+/* Botón para desplegar/ocultar las fotos de cada evento */
+.btn-toggle-fotos {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--rojo-pasion);
+    background-color: transparent;
+    color: var(--texto-principal);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-toggle-fotos::after {
+    content: '\f107';
+    /* fa-angle-down */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.9rem;
+}
+
+.btn-toggle-fotos.abierto::after {
+    content: '\f106';
+    /* fa-angle-up */
+}
+
+.btn-toggle-fotos:hover {
+    background-color: var(--rojo-pasion);
+    color: #fff;
+}
+
+/* Contenedor de fotos de evento colapsable por defecto */
+.evento-fotos {
+    display: none;
+}
+
+.evento-fotos.abierto {
+    display: grid;
 }
 
 /* Rejilla de fotos tipo Instagram/Pinterest */
 .grid-fotos {
-    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 15px;
     margin-bottom: 50px;
