@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
@@ -46,9 +47,18 @@ Route::get('/galeria', function (Request $request) {
 
     // Cogemos la temporada del menú desplegable (o la más reciente por defecto)
     $selectedSeasonId = $request->input('temporada', $seasons->first()->id ?? null);
-    $temporadaActiva = Season::with('events.photos')->find($selectedSeasonId);
+    $modoAntiguas = ($selectedSeasonId === 'antiguas');
+    $temporadaActiva = $modoAntiguas ? null : Season::with('events.photos')->find($selectedSeasonId);
 
-    return view('galeria', compact('seasons', 'temporadaActiva'));
+    $fotosAntiguas = [];
+    if ($modoAntiguas) {
+        $files = Storage::disk('public')->files('antiguas');
+        $fotosAntiguas = array_values(array_filter($files, function ($p) {
+            return preg_match('/\\.(jpe?g|png|webp|gif)$/i', $p);
+        }));
+    }
+
+    return view('galeria', compact('seasons', 'temporadaActiva', 'modoAntiguas', 'fotosAntiguas', 'selectedSeasonId'));
 })->name('galeria');
 
 // --- ZONA DE AUTENTICACIÓN (LOGIN) ---

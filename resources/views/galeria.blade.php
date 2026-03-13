@@ -27,6 +27,9 @@
         @if($seasons->count() > 0)
         <form action="{{ route('galeria') }}" method="GET" class="selector-temporada">
             <select name="temporada" onchange="this.form.submit()">
+                <option value="antiguas" {{ (isset($selectedSeasonId) && $selectedSeasonId === 'antiguas') ? 'selected' : '' }}>
+                    Fotos antiguas
+                </option>
                 @foreach($seasons as $season)
                 <option value="{{ $season->id }}" {{ ($temporadaActiva && $temporadaActiva->id == $season->id) ? 'selected' : '' }}>
                     {{ $season->name }}
@@ -38,30 +41,50 @@
     </header>
 
     <main style="min-height: 50vh;">
-        @if($temporadaActiva && $temporadaActiva->events->count() > 0)
-        @foreach($temporadaActiva->events as $evento)
-        <div class="evento-container">
-            <h2 class="evento-titulo">
-                <i class="fa-solid fa-trophy"></i> {{ $evento->name }}
-            </h2>
-            <button type="button"
-                    class="btn-toggle-fotos"
-                    data-target="evento-{{ $evento->id }}">
-                VER FOTOS DEL EVENTO
-            </button>
-            <div class="grid-fotos evento-fotos" id="evento-{{ $evento->id }}">
-                @foreach($evento->photos as $foto)
-                <img src="{{ asset('storage/' . $foto->image_path) }}" alt="Foto de {{ $evento->name }}" loading="lazy">
-                @endforeach
+        @if(isset($modoAntiguas) && $modoAntiguas)
+            @if(isset($fotosAntiguas) && count($fotosAntiguas) > 0)
+                <div class="evento-container">
+                    <h2 class="evento-titulo"><i class="fa-solid fa-camera-retro"></i> Fotos antiguas</h2>
+                    <button type="button" class="btn-toggle-fotos" data-target="fotos-antiguas">
+                        VER FOTOS ANTIGUAS
+                    </button>
+                    <div class="grid-fotos evento-fotos" id="fotos-antiguas">
+                        @foreach($fotosAntiguas as $path)
+                            <img src="{{ asset('storage/' . $path) }}" alt="Foto antigua" loading="lazy">
+                        @endforeach
+                    </div>
+                </div>
+            @else
+                <div class="galeria-empty">
+                    <h2><i class="fa-regular fa-images" style="font-size: 3rem; margin-bottom: 20px;"></i></h2>
+                    <h2>AÚN NO HAY FOTOS ANTIGUAS</h2>
+                    <p>Sube imágenes a <strong>storage/app/public/antiguas</strong> para que aparezcan aquí.</p>
+                </div>
+            @endif
+        @elseif($temporadaActiva && $temporadaActiva->events->count() > 0)
+            @foreach($temporadaActiva->events as $evento)
+            <div class="evento-container">
+                <h2 class="evento-titulo">
+                    <i class="fa-solid fa-trophy"></i> {{ $evento->name }}
+                </h2>
+                <button type="button"
+                        class="btn-toggle-fotos"
+                        data-target="evento-{{ $evento->id }}">
+                    VER FOTOS DEL EVENTO
+                </button>
+                <div class="grid-fotos evento-fotos" id="evento-{{ $evento->id }}">
+                    @foreach($evento->photos as $foto)
+                    <img src="{{ asset('storage/' . $foto->image_path) }}" alt="Foto de {{ $evento->name }}" loading="lazy">
+                    @endforeach
+                </div>
             </div>
-        </div>
-        @endforeach
+            @endforeach
         @else
-        <div class="galeria-empty">
-            <h2><i class="fa-regular fa-images" style="font-size: 3rem; margin-bottom: 20px;"></i></h2>
-            <h2>AÚN NO HAY FOTOS</h2>
-            <p>El Míster no ha subido ningún álbum para esta temporada todavía.</p>
-        </div>
+            <div class="galeria-empty">
+                <h2><i class="fa-regular fa-images" style="font-size: 3rem; margin-bottom: 20px;"></i></h2>
+                <h2>AÚN NO HAY FOTOS</h2>
+                <p>El Míster no ha subido ningún álbum para esta temporada todavía.</p>
+            </div>
         @endif
     </main>
 
