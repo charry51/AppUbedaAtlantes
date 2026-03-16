@@ -1,151 +1,87 @@
 @extends('layouts.app')
 
-@section('title', 'Galería - Úbeda Atlantes')
+@section('title', 'Galería de Fotos | Úbeda Atlantes Rugby')
 
 @section('seo')
-    <meta name="description" content="Galería de fotos del Club de Rugby Úbeda Atlantes. Repasa los mejores momentos, partidos y terceros tiempos del club.">
-    <meta name="keywords" content="fotos rugby, galería rugby úbeda, imágenes equipo rugby, ubeda atlantes fotos, deporte jaen">
-    <meta name="author" content="Club de Rugby Úbeda Atlantes">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Galería de Fotos - Úbeda Atlantes">
-    <meta property="og:description" content="Galería de fotos del Club de Rugby Úbeda Atlantes. Repasa los mejores momentos, partidos y terceros tiempos del club.">
+    <meta name="description" content="Revive los mejores momentos del Úbeda Atlantes. Fotos de partidos, terceros tiempos y eventos solidarios en Úbeda.">
+    <meta name="keywords" content="rugby úbeda, atlantes rugby, fotos rugby jaén">
+    <meta property="og:title" content="Galería de Fotos | Úbeda Atlantes">
+    <meta property="og:description" content="Explora nuestra historia en imágenes. Temporada tras temporada.">
     <meta property="og:image" content="{{ asset('images/principal.jpg') }}">
     <meta property="og:url" content="{{ route('galeria') }}">
-    <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Galería de Fotos - Úbeda Atlantes">
-    <meta name="twitter:description" content="Galería de fotos del Club de Rugby Úbeda Atlantes. Repasa los mejores momentos, partidos y terceros tiempos del club.">
-    <meta name="twitter:image" content="{{ asset('images/principal.jpg') }}">
     <link rel="canonical" href="{{ route('galeria') }}">
 @endsection
 
+@section('styles')
+<style>
+    .evento-desplegable { margin-bottom: 15px; background: var(--bg-secundario); border-radius: 8px; border: 1px solid #333; overflow: hidden; }
+    .evento-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; cursor: pointer; border-left: 5px solid var(--rojo-pasion); }
+    .evento-titulo { font-family: 'Oswald', sans-serif; font-size: 1.3rem; text-transform: uppercase; margin: 0; color: #fff; }
+    .evento-contenido { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; background: #000; }
+    .evento-contenido.abierto { max-height: 5000px; padding: 20px; border-top: 1px solid #222; }
+    .fotos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+    .foto-item { aspect-ratio: 1/1; border-radius: 4px; overflow: hidden; cursor: pointer; background: #111; }
+    .foto-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    .foto-item:hover img { transform: scale(1.1); }
+    #modalGaleria { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+    #imgModal { max-width: 90%; max-height: 85vh; border-radius: 4px; }
+</style>
+@endsection
+
 @section('content')
-    <header class="galeria-header">
-        <h1><i class="fa-solid fa-camera-retro" style="color: var(--rojo-pasion);"></i> NUESTRA HISTORIA</h1>
-        <p>Repasa los mejores momentos, partidos y terceros tiempos del club.</p>
+    <section class="hero" style="--bg-img: url('{{ asset('images/principal.jpg') }}'); min-height: 35vh;">
+        <h1 style="text-transform: uppercase;"><i class="fa-solid fa-images"></i> GALERÍA ATLANTE</h1>
+        <p>Selecciona un evento para ver las imágenes.</p>
+    </section>
 
-        @if($seasons->count() > 0)
-        <form action="{{ route('galeria') }}" method="GET" class="selector-temporada">
-            <select name="temporada" onchange="this.form.submit()">
-                <option value="antiguas" {{ (isset($selectedSeasonId) && $selectedSeasonId === 'antiguas') ? 'selected' : '' }}>
-                    Fotos antiguas
-                </option>
-                @foreach($seasons as $season)
-                <option value="{{ $season->id }}" {{ ($temporadaActiva && $temporadaActiva->id == $season->id) ? 'selected' : '' }}>
-                    {{ $season->name }}
-                </option>
-                @endforeach
-            </select>
-        </form>
-        @endif
-    </header>
-
-    <main style="min-height: 50vh;">
-        @if(isset($modoAntiguas) && $modoAntiguas)
-            @if(isset($fotosAntiguas) && count($fotosAntiguas) > 0)
-                <div class="evento-container">
-                    <h2 class="evento-titulo"><i class="fa-solid fa-camera-retro"></i> Fotos antiguas</h2>
-                    <button type="button" class="btn-toggle-fotos" data-target="fotos-antiguas">
-                        VER FOTOS ANTIGUAS
-                    </button>
-                    <div class="grid-fotos evento-fotos" id="fotos-antiguas">
-                        @foreach($fotosAntiguas as $path)
-                            <img src="{{ asset('storage/' . $path) }}" alt="Foto antigua" loading="lazy">
+    <div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+        @forelse($events as $event)
+            <div class="evento-desplegable">
+                <div class="evento-header" onclick="toggleEvento({{ $event->id }})">
+                    <div>
+                        <h3 class="evento-titulo">{{ $event->name }}</h3>
+                        <span style="color: #888; font-size: 0.8rem;">{{ $event->photos->count() }} imágenes en este álbum</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                
+                <div class="evento-contenido" id="contenido-{{ $event->id }}">
+                    <div class="fotos-grid">
+                        @foreach($event->photos as $photo)
+                            @if($photo->path)
+                                @php 
+                                    // Preparamos la URL para el túnel (cambiamos / por -)
+                                    $fotoUrl = route('foto.directa', ['path' => str_replace('/', '-', $photo->path)]);
+                                @endphp
+                                <div class="foto-item" onclick="verFoto('{{ $fotoUrl }}')">
+                                    <img src="{{ $fotoUrl }}" alt="Rugby Úbeda Atlantes" loading="lazy">
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
-            @else
-                <div class="galeria-empty">
-                    <h2><i class="fa-regular fa-images" style="font-size: 3rem; margin-bottom: 20px;"></i></h2>
-                    <h2>AÚN NO HAY FOTOS ANTIGUAS</h2>
-                    <p>Sube imágenes a <strong>storage/app/public/antiguas</strong> para que aparezcan aquí.</p>
-                </div>
-            @endif
-        @elseif($temporadaActiva && $temporadaActiva->events->count() > 0)
-            @foreach($temporadaActiva->events as $evento)
-            <div class="evento-container">
-                <h2 class="evento-titulo">
-                    <i class="fa-solid fa-trophy"></i> {{ $evento->name }}
-                </h2>
-                <button type="button"
-                        class="btn-toggle-fotos"
-                        data-target="evento-{{ $evento->id }}">
-                    VER FOTOS DEL EVENTO
-                </button>
-                <div class="grid-fotos evento-fotos" id="evento-{{ $evento->id }}">
-                    @foreach($evento->photos as $foto)
-                    <img src="{{ asset('storage/' . $foto->image_path) }}" alt="Foto de {{ $evento->name }}" loading="lazy">
-                    @endforeach
-                </div>
             </div>
-            @endforeach
-        @else
-            <div class="galeria-empty">
-                <h2><i class="fa-regular fa-images" style="font-size: 3rem; margin-bottom: 20px;"></i></h2>
-                <h2>AÚN NO HAY FOTOS</h2>
-                <p>El Míster no ha subido ningún álbum para esta temporada todavía.</p>
+        @empty
+            <div style="text-align: center; color: #666; padding: 50px;">
+                <p>No hay álbumes de fotos todavía.</p>
             </div>
-        @endif
-    </main>
+        @endforelse
+    </div>
 
-    <div id="lightbox" class="lightbox-modal">
-        <span class="lightbox-close">&times;</span>
-        <img class="lightbox-content" id="lightbox-img">
+    <div id="modalGaleria" onclick="this.style.display='none'">
+        <img id="imgModal">
     </div>
 @endsection
 
 @section('scripts')
 <script>
-    // DESPLEGABLE DE FOTOS POR EVENTO
-    const toggleButtons = document.querySelectorAll('.btn-toggle-fotos');
-
-    toggleButtons.forEach(btn => {
-        const targetId = btn.dataset.target;
-        const target = document.getElementById(targetId);
-
-        if (!target) return;
-
-        // Inicialmente colapsado
-        target.classList.remove('abierto');
-
-        btn.addEventListener('click', () => {
-            const isOpen = target.classList.toggle('abierto');
-            btn.classList.toggle('abierto', isOpen);
-            btn.textContent = isOpen ? 'OCULTAR FOTOS DEL EVENTO' : 'VER FOTOS DEL EVENTO';
-        });
-    });
-
-    // LÓGICA DEL LIGHTBOX (FOTOS EN GRANDE)
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const galeriaImgs = document.querySelectorAll('.grid-fotos img');
-    const closeBtn = document.querySelector('.lightbox-close');
-
-    galeriaImgs.forEach(img => {
-        img.addEventListener('click', function () {
-            lightbox.style.display = 'flex';
-            lightboxImg.src = this.src;
-            document.body.style.overflow = 'hidden';
-        });
-    });
-
-    closeBtn.addEventListener('click', () => {
-        lightbox.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
-
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            lightbox.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === "Escape" && lightbox.style.display === 'flex') {
-            lightbox.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
+    function toggleEvento(id) {
+        document.getElementById('contenido-' + id).classList.toggle('abierto');
+    }
+    function verFoto(src) {
+        document.getElementById('modalGaleria').style.display = 'flex';
+        document.getElementById('imgModal').src = src;
+    }
 </script>
 @endsection

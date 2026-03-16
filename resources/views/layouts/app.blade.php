@@ -30,11 +30,12 @@
         </button>
 
         <div class="nav-links" id="nav-links">
-            <a href="{{ url('/') }}#valores">El Club</a>
+            <a href="{{ route('historia') }}">Historia</a>
+            <a href="{{ route('femenino') }}">Cariátides</a>
+            <a href="{{ route('escuela') }}">Escuela</a>
             <a href="{{ route('blog') }}" @yield('nav-blog')>Blog</a>
             <a href="{{ route('galeria') }}" @yield('nav-galeria')>Galería</a>
-            <a href="{{ url('/') }}#horarios">Horarios</a>
-            <a href="{{ url('/') }}#contacto" class="btn-nav">¡Apúntate!</a>
+            <a href="{{ route('contacto') }}" class="btn-nav">¡Apúntate!</a>
         </div>
 
         <div class="social-icons">
@@ -71,12 +72,10 @@
                 <h3>CONTACTO Y LEGAL</h3>
                 <p><strong>Teléfono:</strong> 652 02 77 84</p>
                 <ul class="footer-links">
+                    <li><a href="{{ route('patrocinadores') }}">Patrocinadores</a></li>
                     <li><a href="{{ route('privacidad') }}">Política de Privacidad</a></li>
                     <li><a href="{{ route('aviso-legal') }}">Aviso Legal</a></li>
                     <li><a href="{{ route('cookies') }}">Política de Cookies</a></li>
-                    <li><a href="{{ route('documentacion') }}" class="link-destacado">
-                        <i class="fa-solid fa-file-lines"></i> Documentación del Proyecto
-                    </a></li>
                 </ul>
             </div>
         </div>
@@ -128,7 +127,6 @@
                 iconoMenu.classList.toggle('fa-xmark');
             });
 
-            // Cerrar el menú al hacer clic en un enlace (en móviles)
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
                     navLinks.classList.remove('active');

@@ -30,4 +30,19 @@ class HomeController extends Controller
 
         return view('welcome', compact('nextGame', 'upcomingGames'));
     }
+
+    public function galeria(Request $request)
+{
+    // Traemos temporadas y eventos con sus fotos
+    $seasons = \App\Models\Season::orderBy('created_at', 'desc')->get();
+    $query = \App\Models\Event::with('photos', 'season');
+
+    if ($request->has('temporada')) {
+        $query->where('season_id', $request->temporada);
+    }
+
+    $events = $query->orderBy('created_at', 'desc')->get();
+
+    return view('galeria', compact('seasons', 'events'));
+}
 }

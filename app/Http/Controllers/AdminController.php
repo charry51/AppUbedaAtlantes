@@ -10,53 +10,84 @@ use App\Models\Post;
 use App\Models\Season;
 use App\Models\Event;
 use App\Models\Photo;
+use App\Models\Sponsor;
 
 class AdminController extends Controller
 {
-    // 1. Cargar la pantalla del panel con los datos
+    // 1. Panel Principal
     public function index()
     {
-        // Traemos todos los novatos, del más reciente al más antiguo
         $contactos = Contact::orderBy('created_at', 'desc')->get();
-
         return view('admin.dashboard', compact('contactos'));
     }
 
-    // 2. Guardar un nuevo partido y publicarlo en la web
+    // ----------------------------------------------------
+    // GESTIÓN DE PARTIDOS
+    // ----------------------------------------------------
     public function guardarPartido(Request $request)
     {
-        // Validamos todos los campos antes de guardar
         $request->validate([
-            'rival'      => 'required|string|max:100',
-            'fecha'      => 'required|date|after:now',
-            'lugar'      => 'required|string|max:200',
-            'rival_logo' => 'nullable|image|max:2048',
+            'tipo' => 'required|in:partido,torneo',
+            'rival' => 'required_if:tipo,partido|nullable|string',
+            'nombre_torneo' => 'required_if:tipo,torneo|nullable|string',
+            'fecha' => 'required',
+            'lugar' => 'required|string',
         ]);
 
-        $partido = new Game();
-        $partido->rival    = $request->rival;
-        $partido->fecha    = $request->fecha;
-        $partido->lugar    = $request->lugar;
-        $partido->es_local = $request->has('es_local') ? 1 : 0;
-
-        // Si el míster sube una foto del escudo rival, la guardamos en storage/rivales/
-        if ($request->hasFile('rival_logo')) {
+        $rutaLogo = null;
+        if ($request->hasFile('rival_logo') && $request->tipo == 'partido') {
             $rutaLogo = $request->file('rival_logo')->store('rivales', 'public');
-            $partido->rival_logo = $rutaLogo;
         }
 
-        $partido->save();
+        Game::create([
+            'tipo' => $request->tipo,
+            'nombre_torneo' => $request->nombre_torneo,
+            'rival' => $request->rival,
+            'fecha' => $request->fecha,
+            'lugar' => $request->lugar,
+            'es_local' => $request->has('es_local'),
+            'rival_logo' => $rutaLogo,
+        ]);
 
-        return back()->with('success', '¡El marcador de la web pública ha sido actualizado!');
+        return redirect()->back()->with(['success' => 'Encuentro actualizado', 'partido_ok' => true]);
     }
 
-    // Eliminar un recluta de la lista
+    public function editPartido($id) {
+        $partido = Game::findOrFail($id);
+        return view('admin.edit-partido', compact('partido'));
+    }
+
+    public function updatePartido(Request $request, $id) {
+        $partido = Game::findOrFail($id);
+        if ($request->hasFile('rival_logo')) {
+            if ($partido->rival_logo) Storage::disk('public')->delete($partido->rival_logo);
+            $partido->rival_logo = $request->file('rival_logo')->store('rivales', 'public');
+        }
+        $partido->update($request->except('rival_logo')); // Actualiza todo menos el logo que ya lo hemos gestionado
+        
+        // El checkbox de local se gestiona aparte porque si no se marca no viene en el request
+        $partido->es_local = $request->has('es_local');
+        $partido->save();
+
+        return redirect()->route('admin.dashboard')->with('success', 'Encuentro actualizado');
+    }
+
+    public function eliminarPartido($id)
+    {
+        $game = Game::findOrFail($id);
+        if ($game->rival_logo) Storage::disk('public')->delete($game->rival_logo);
+        $game->delete();
+        return redirect()->back()->with('success', 'Partido eliminado correctamente');
+    }
+
+    // ----------------------------------------------------
+    // GESTIÓN DE RECLUTAS
+    // ----------------------------------------------------
     public function eliminarRecluta($id)
     {
         $recluta = Contact::findOrFail($id);
         $recluta->delete();
-
-        return back()->with('success', 'Recluta gestionado y eliminado de la lista.');
+        return back()->with('success', 'Recluta gestionado y eliminado.');
     }
 
     // ----------------------------------------------------
@@ -64,61 +95,125 @@ class AdminController extends Controller
     // ----------------------------------------------------
     public function guardarPost(Request $request)
     {
-        // 1. Validamos que nos mandan todo lo necesario
         $request->validate([
             'title'   => 'required|string|max:255',
             'content' => 'required',
-            'image'   => 'required|image|max:2048', // Máximo 2MB
+            'image'   => 'required|image|max:2048',
         ]);
 
-        // 2. Guardamos la foto en la carpeta public/storage/blog
         $rutaImagen = $request->file('image')->store('blog', 'public');
 
-        // 3. Creamos el registro en la base de datos
         Post::create([
             'title'   => $request->title,
             'content' => $request->content,
             'image'   => $rutaImagen,
         ]);
 
-        // 4. Devolvemos al Míster a su panel con un mensaje de éxito
-        return back()->with('success', '¡Noticia publicada con éxito en el Blog!');
+        return back()->with('success', '¡Noticia publicada con éxito!');
+    }
+
+    public function editPost($id) {
+        $post = Post::findOrFail($id);
+        return view('admin.edit-post', compact('post'));
+    }
+
+    public function updatePost(Request $request, $id) {
+        $post = Post::findOrFail($id);
+        $request->validate(['title' => 'required', 'content' => 'required']);
+
+        if ($request->hasFile('image')) {
+            if ($post->image) Storage::disk('public')->delete($post->image);
+            $post->image = $request->file('image')->store('blog', 'public');
+        }
+
+        $post->update(['title' => $request->title, 'content' => $request->content]);
+        return redirect()->route('admin.dashboard')->with('success', 'Crónica actualizada');
+    }
+
+    public function eliminarPost($id)
+    {
+        $post = Post::findOrFail($id);
+        if ($post->image) Storage::disk('public')->delete($post->image);
+        $post->delete();
+        return redirect()->back()->with('success', 'Crónica eliminada');
     }
 
     // ----------------------------------------------------
-    // LÓGICA DE LA GALERÍA DE FOTOS
+    // LÓGICA DE LA GALERÍA
     // ----------------------------------------------------
     public function guardarFotos(Request $request)
     {
-        // 1. Validamos los datos y el array de fotos
+        ini_set('max_execution_time', 300); 
+        ini_set('memory_limit', '512M');
+        
         $request->validate([
             'season_name' => 'required|string|max:100',
             'event_name'  => 'required|string|max:200',
-            'photos.*'    => 'required|image|max:51200', // Cada foto máximo 50MB
+            'photos.*'    => 'required|image|max:10240', // Max 10MB por foto
         ]);
 
-        // 2. Buscamos si la Temporada ya existe. Si no, la creamos.
-        $temporada = Season::firstOrCreate([
-            'name' => $request->season_name,
-        ]);
-
-        // 3. Buscamos o creamos el Evento dentro de esa temporada
+        $temporada = Season::firstOrCreate(['name' => $request->season_name]);
         $evento = Event::firstOrCreate([
             'season_id' => $temporada->id,
             'name'      => $request->event_name,
         ]);
 
-        // 4. Bucle para subir todas las fotos seleccionadas
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $foto) {
                 $rutaFoto = $foto->store('galeria', 'public');
                 Photo::create([
                     'event_id'   => $evento->id,
-                    'image_path' => $rutaFoto,
+                    'path' => $rutaFoto, // Cambiado de image_path a path para coincidir con tu BD
                 ]);
             }
         }
 
-        return back()->with('success', '¡Álbum guardado con éxito en la Galería!');
+        return back()->with('success', '¡Álbum guardado con éxito!');
+    }
+
+    // ----------------------------------------------------
+    // LÓGICA DE PATROCINADORES
+    // ----------------------------------------------------
+    public function guardarPatrocinador(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'logo' => 'required|image|max:2048',
+            'nivel' => 'required|string',
+        ]);
+
+        $rutaLogo = $request->file('logo')->store('sponsors', 'public');
+
+        Sponsor::create([
+            'nombre' => $request->nombre,
+            'logo' => $rutaLogo,
+            'enlace' => $request->enlace,
+            'nivel' => $request->nivel,
+        ]);
+
+        return redirect()->back()->with('success', '¡Patrocinador fichado!');
+    }
+
+    public function editSponsor($id) {
+        $sponsor = Sponsor::findOrFail($id);
+        return view('admin.edit-sponsor', compact('sponsor'));
+    }
+
+    public function updateSponsor(Request $request, $id) {
+        $sponsor = Sponsor::findOrFail($id);
+        if ($request->hasFile('logo')) {
+            if ($sponsor->logo) Storage::disk('public')->delete($sponsor->logo);
+            $sponsor->logo = $request->file('logo')->store('sponsors', 'public');
+        }
+        $sponsor->update($request->only(['nombre', 'nivel', 'enlace']));
+        return redirect()->route('admin.dashboard')->with('success', 'Patrocinador actualizado');
+    }
+
+    public function eliminarSponsor($id)
+    {
+        $sponsor = Sponsor::findOrFail($id);
+        if ($sponsor->logo) Storage::disk('public')->delete($sponsor->logo);
+        $sponsor->delete();
+        return redirect()->back()->with('success', 'Patrocinador eliminado');
     }
 }

@@ -10,11 +10,35 @@ use App\Http\Controllers\AdminController;
 use App\Models\Post;
 use App\Models\Season;
 
-// Ruta principal - lógica delegada al HomeController (patrón MVC)
+// Ruta principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// La ruta de contacto que ya teníamos
+// --- NUEVAS RUTAS PÚBLICAS INDEPENDIENTES (BLOQUE 1) ---
+Route::get('/historia', function () {
+    return view('historia');
+})->name('historia');
+
+Route::get('/equipo-femenino', function () {
+    return view('femenino');
+})->name('femenino');
+
+Route::get('/patrocinadores', function () {
+    $sponsors = \App\Models\Sponsor::orderBy('orden', 'asc')->get();
+    return view('patrocinadores', compact('sponsors'));
+})->name('patrocinadores');
+
+Route::get('/escuela', function () {
+    return view('escuela');
+})->name('escuela');
+
+// Nueva ruta GET para MOSTRAR la página de contacto
+Route::get('/contacto', function () {
+    return view('contacto');
+})->name('contacto');
+
+// La ruta POST que ya tenías para PROCESAR el formulario
 Route::post('/contacto', [ContactController::class , 'store'])->name('contacto.store');
+// --------------------------------------------------------
 
 Route::get('/documentacion', function () {
     return view('documentacion');
@@ -32,58 +56,69 @@ Route::get('/cookies', function () {
     return view('cookies');
 })->name('cookies');
 
-// --- ZONA DE AUTENTICACIÓN (LOGIN) ---
-
 // --- RUTAS PÚBLICAS PARA EL BLOG Y LA GALERÍA ---
 Route::get('/blog', function () {
-    // Traemos las noticias paginadas (6 por página)
     $posts = Post::orderBy('created_at', 'desc')->paginate(6);
     return view('blog', compact('posts'));
 })->name('blog');
 
-Route::get('/galeria', function (Request $request) {
-    // Traemos las temporadas con sus eventos y fotos
-    $seasons = Season::with('events.photos')->orderBy('created_at', 'desc')->get();
+Route::get('/galeria', function (Illuminate\Http\Request $request) {
+    // 1. Traemos las temporadas
+    $seasons = \App\Models\Season::orderBy('created_at', 'desc')->get();
+    
+    // 2. Miramos qué temporada ha elegido el usuario (o la última por defecto)
+    $selectedSeasonId = $request->input('temporada');
 
-    // Cogemos la temporada del menú desplegable (o la más reciente por defecto)
-    $selectedSeasonId = $request->input('temporada', $seasons->first()->id ?? null);
+    // 3. Preparamos la consulta de eventos (álbumes)
+    $query = \App\Models\Event::with('photos', 'season');
+
+    if ($selectedSeasonId && $selectedSeasonId !== 'antiguas') {
+        $query->where('season_id', $selectedSeasonId);
+    }
+
+    $events = $query->orderBy('created_at', 'desc')->get();
+
+    // 4. Lógica para fotos antiguas (si existe la carpeta)
     $modoAntiguas = ($selectedSeasonId === 'antiguas');
-    $temporadaActiva = $modoAntiguas ? null : Season::with('events.photos')->find($selectedSeasonId);
-
     $fotosAntiguas = [];
     if ($modoAntiguas) {
         $files = Storage::disk('public')->files('antiguas');
         $fotosAntiguas = array_values(array_filter($files, function ($p) {
-            return preg_match('/\\.(jpe?g|png|webp|gif)$/i', $p);
+            return preg_match('/\.(jpe?g|png|webp|gif)$/i', $p);
         }));
     }
 
-    return view('galeria', compact('seasons', 'temporadaActiva', 'modoAntiguas', 'fotosAntiguas', 'selectedSeasonId'));
+    // Enviamos EXACTAMENTE lo que la vista espera: $seasons y $events
+    return view('galeria', compact('seasons', 'events', 'modoAntiguas', 'fotosAntiguas', 'selectedSeasonId'));
 })->name('galeria');
 
 // --- ZONA DE AUTENTICACIÓN (LOGIN) ---
-// Estas rutas muestran el formulario y procesan la entrada
 Route::get('/login', [AuthController::class , 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class , 'login']);
 Route::post('/logout', [AuthController::class , 'logout'])->name('logout');
 
-
-
 // --- ZONA PRIVADA (EL VESTUARIO) ---
 Route::middleware('auth')->group(function () {
-
-    // Ver el panel
     Route::get('/admin', [AdminController::class , 'index'])->name('admin.dashboard');
-
-    // Guardar el partido desde el panel
     Route::post('/admin/partido', [AdminController::class , 'guardarPartido'])->name('admin.partido.store');
-
-    // --- RUTAS NUEVAS PARA BLOG Y FOTOS ---
     Route::post('/admin/blog/store', [AdminController::class , 'guardarPost'])->name('admin.post.store');
-
     Route::post('/admin/fotos/store', [AdminController::class , 'guardarFotos'])->name('admin.photo.store');
-
-    // --- (Movido aquí dentro por seguridad) ---
     Route::delete('/admin/recluta/{id}', [AdminController::class , 'eliminarRecluta'])->name('admin.recluta.delete');
-
+    Route::post('/admin/patrocinadores/store', [AdminController::class , 'guardarPatrocinador'])->name('admin.sponsor.store');
+    Route::delete('/admin/partidos/{id}', [AdminController::class, 'eliminarPartido'])->name('admin.partido.delete');
+    Route::delete('/admin/posts/{id}', [AdminController::class, 'eliminarPost'])->name('admin.post.delete');
+    Route::delete('/admin/sponsors/{id}', [AdminController::class, 'eliminarSponsor'])->name('admin.sponsor.delete');
 });
+
+// Túnel de emergencia para ver las fotos si el storage:link falla en Mac
+Route::get('/ver-foto/{path}', function ($path) {
+    // Desacemos el cambio de guiones por barras
+    $path = str_replace('-', '/', $path);
+    $fullPath = storage_path('app/public/' . $path);
+    
+    if (!file_exists($fullPath)) {
+        return response()->file(public_path('images/logo.png')); // Si falla, que salga el logo del club
+    }
+    
+    return response()->file($fullPath);
+})->where('path', '.*')->name('foto.directa');

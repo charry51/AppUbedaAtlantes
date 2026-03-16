@@ -33,16 +33,6 @@
                 <div class="alerta-exito">{{ session('success') }}</div>
             @endif
 
-            @if ($errors->any())
-            <div style="background-color: #ffebee; border-left: 5px solid var(--rojo-pasion); color: #c62828; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
-                <ul style="margin: 0; padding-left: 20px;">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-
             @if($contactos->count() > 0)
                 <div class="table-responsive">
                     <table>
@@ -51,8 +41,6 @@
                                 <th>Fecha</th>
                                 <th>Nombre</th>
                                 <th>Edad</th>
-                                <th>Exp.</th>
-                                <th>Mensaje</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -63,27 +51,13 @@
                                 <td style="font-weight: bold;">{{ $recluta->name }}</td>
                                 <td>{{ $recluta->age ?? '-' }}</td>
                                 <td>
-                                    @if($recluta->has_experience)
-                                        <span style="color: #4ade80;"><i class="fa-solid fa-check"></i></span>
-                                    @else
-                                        <span style="color: #ff4d4d;"><i class="fa-solid fa-xmark"></i></span>
-                                    @endif
-                                </td>
-                                <td class="col-mensaje">
-                                    {{ $recluta->message }}
-                                </td>
-                                <td>
                                     <div class="acciones-flex">
-                                        <a href="https://wa.me/34{{ str_replace(' ', '', $recluta->phone) }}" target="_blank" class="btn-whatsapp" title="Contactar">
+                                        <a href="https://wa.me/34{{ str_replace(' ', '', $recluta->phone) }}" target="_blank" class="btn-whatsapp">
                                             <i class="fa-brands fa-whatsapp"></i>
                                         </a>
-
-                                        <form action="{{ route('admin.recluta.delete', $recluta->id) }}" method="POST" onsubmit="return confirm('¿Marcar como gestionado y eliminar de la lista?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-delete" title="Eliminar">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </button>
+                                        <form action="{{ route('admin.recluta.delete', $recluta->id) }}" method="POST" onsubmit="return confirm('¿Eliminar de la lista?')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -93,24 +67,35 @@
                     </table>
                 </div>
             @else
-                <p style="color: #888; text-align: center; padding: 40px;">No hay nuevos reclutas pendientes de gestión.</p>
+                <p style="color: #888; text-align: center; padding: 40px;">No hay nuevos reclutas pendientes.</p>
             @endif
         </div>
 
         <div class="caja-admin">
-            <h2><i class="fa-solid fa-trophy"></i> Próximo Partido</h2>
+            <h2><i class="fa-solid fa-trophy"></i> Gestión de Encuentros</h2>
             
             @if(session('success') && session('partido_ok'))
-                <div class="alerta-exito">
-                    <i class="fa-solid fa-circle-check"></i> Web actualizada.
-                </div>
+                <div class="alerta-exito"><i class="fa-solid fa-circle-check"></i> Web actualizada.</div>
             @endif
 
             <form action="{{ route('admin.partido.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
+                    <label>¿QUÉ SE JUEGA?</label>
+                    <select name="tipo" id="tipo_encuentro" onchange="toggleTipo()" style="width: 100%; padding: 10px; background: var(--bg-principal); color: white; border-radius: 4px;">
+                        <option value="partido">Partido Único (XV vs XV)</option>
+                        <option value="torneo">Torneo / Concentración / Rugby Fest</option>
+                    </select>
+                </div>
+
+                <div id="campo_rival" class="form-group">
                     <label>EQUIPO RIVAL</label>
-                    <input type="text" name="rival" required placeholder="Ej: Jaén Rugby">
+                    <input type="text" name="rival" placeholder="Ej: Jaén Rugby">
+                </div>
+
+                <div id="campo_torneo" class="form-group" style="display: none;">
+                    <label>NOMBRE DEL TORNEO</label>
+                    <input type="text" name="nombre_torneo" placeholder="Ej: X Torneo Solidario Ciudad de Úbeda">
                 </div>
 
                 <div class="form-group">
@@ -120,73 +105,119 @@
 
                 <div class="form-group">
                     <label>LUGAR / ESTADIO</label>
-                    <input type="text" name="lugar" required placeholder="Ej: Polideportivo San Miguel">
+                    <input type="text" name="lugar" required placeholder="Ej: Polideportivo Antonio Cruz">
                 </div>
 
-                <div class="form-group">
+                <div id="campo_logo" class="form-group">
                     <label>ESCUDO RIVAL (Opcional)</label>
                     <input type="file" name="rival_logo" accept="image/*">
                 </div>
 
                 <div class="check-group form-group">
                     <input type="checkbox" name="es_local" id="es_local" checked>
-                    <label for="es_local">Jugamos en Úbeda (Local)</label>
+                    <label for="es_local">Se juega en casa (Úbeda/La Loma)</label>
                 </div>
 
-                <button type="submit" class="btn-submit">ACTUALIZAR WEB <i class="fa-solid fa-satellite-dish"></i></button>
+                <button type="submit" class="btn-submit">ACTUALIZAR ENCUENTRO <i class="fa-solid fa-satellite-dish"></i></button>
             </form>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #444;">
+            <h4 style="color: #888; margin-bottom: 15px;">PARTIDOS PROGRAMADOS:</h4>
+            @php $partidos = \App\Models\Game::orderBy('fecha', 'asc')->get(); @endphp
+            @foreach($partidos as $p)
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+                    <span style="font-size: 0.85rem;">
+                        {{ $p->tipo == 'torneo' ? $p->nombre_torneo : 'vs ' . $p->rival }}
+                    </span>
+                    <form action="{{ route('admin.partido.delete', $p->id) }}" method="POST" onsubmit="return confirm('¿Borrar partido?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" style="background: none; border: none; color: #ff4d4d; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
+                    </form>
+                </div>
+            @endforeach
         </div>
 
         <div class="caja-admin">
             <h2><i class="fa-solid fa-newspaper"></i> Publicar en el Blog</h2>
-            
             <form action="{{ route('admin.post.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group">
-                    <label>TÍTULO DE LA NOTICIA</label>
-                    <input type="text" name="title" required placeholder="Ej: Crónica del derbi contra Jaén">
-                </div>
-
-                <div class="form-group">
-                    <label>IMAGEN DE PORTADA</label>
-                    <input type="file" name="image" required accept="image/*">
-                </div>
-
+                <div class="form-group"><label>TÍTULO</label><input type="text" name="title" required></div>
+                <div class="form-group"><label>IMAGEN</label><input type="file" name="image" required accept="image/*"></div>
                 <div class="form-group">
                     <label>CONTENIDO</label>
-                    <textarea name="content" rows="6" required placeholder="Escribe aquí la noticia..." style="width: 100%; padding: 12px; background: var(--bg-principal); border: 1px solid var(--borde-color); color: white; border-radius: 4px; font-family: inherit; resize: vertical;"></textarea>
+                    <textarea name="content" rows="6" required style="width: 100%; padding: 12px; background: var(--bg-principal); color: white; border-radius: 4px; font-family: inherit; resize: vertical;"></textarea>
                 </div>
-
-                <button type="submit" class="btn-submit">PUBLICAR NOTICIA <i class="fa-solid fa-paper-plane"></i></button>
+                <button type="submit" class="btn-submit">PUBLICAR <i class="fa-solid fa-paper-plane"></i></button>
             </form>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #444;">
+            <h4 style="color: #888; margin-bottom: 15px;">NOTICIAS PUBLICADAS:</h4>
+            @php $posts = \App\Models\Post::latest()->get(); @endphp
+            @foreach($posts as $post)
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; margin-bottom: 5px;">
+                    <span style="font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%;">{{ $post->title }}</span>
+                    <form action="{{ route('admin.post.delete', $post->id) }}" method="POST" onsubmit="return confirm('¿Borrar noticia?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" style="background: none; border: none; color: #ff4d4d; cursor: pointer;"><i class="fa-solid fa-trash-can"></i></button>
+                    </form>
+                </div>
+            @endforeach
         </div>
 
         <div class="caja-admin">
-            <h2><i class="fa-solid fa-camera-retro"></i> Subir Fotos a Galería</h2>
-            
+            <h2><i class="fa-solid fa-camera-retro"></i> Galería de Fotos</h2>
             <form action="{{ route('admin.photo.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <div class="form-group"><label>TEMPORADA</label><input type="text" name="season_name" required placeholder="2025-2026"></div>
+                <div class="form-group"><label>EVENTO</label><input type="text" name="event_name" required></div>
                 <div class="form-group">
-                    <label>TEMPORADA</label>
-                    <input type="text" name="season_name" required placeholder="Ej: Temporada 2025-2026">
-                </div>
-
-                <div class="form-group">
-                    <label>NOMBRE DEL EVENTO / PARTIDO</label>
-                    <input type="text" name="event_name" required placeholder="Ej: Atlantes vs Escoriones">
-                </div>
-
-                <div class="form-group">
-                    <label>SELECCIONAR FOTOS (Puedes elegir varias a la vez)</label>
+                    <label>FOTOS</label>
                     <input type="file" name="photos[]" multiple required accept="image/*">
-                    <small style="color: var(--texto-gris); display: block; margin-top: 5px;">Mantén pulsado Ctrl (o Cmd en Mac) al elegir fotos para subir varias.</small>
                 </div>
-
-                <button type="submit" class="btn-submit" style="background-color: #08d7ea; color: #000;">SUBIR ÁLBUM <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                <button type="submit" class="btn-submit" style="background-color: #08d7ea; color: #000;">SUBIR ÁLBUM</button>
             </form>
+        </div>
+
+        <div class="caja-admin" style="border-top: 4px solid #FFD700;">
+            <h2><i class="fa-solid fa-handshake"></i> Añadir Patrocinador</h2>
+            <form action="{{ route('admin.sponsor.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group"><label>EMPRESA</label><input type="text" name="nombre" required></div>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1;"><label>NIVEL</label>
+                        <select name="nivel" required style="width: 100%; padding: 12px; background: var(--bg-principal); color: white; border-radius: 4px;">
+                            <option value="Oro">Oro</option><option value="Plata">Plata</option><option value="Bronce">Bronce</option><option value="Colaborador">Colaborador</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 2;"><label>WEB (URL)</label><input type="url" name="enlace"></div>
+                </div>
+                <div class="form-group"><label>LOGO</label><input type="file" name="logo" accept="image/*" required></div>
+                <button type="submit" class="btn-submit" style="background-color: #FFD700; color: #000;">FICHAR <i class="fa-solid fa-upload"></i></button>
+            </form>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #444;">
+            <h4 style="color: #888; margin-bottom: 15px;">Sponsors Actuales:</h4>
+            @php $sponsors_list = \App\Models\Sponsor::all(); @endphp
+            @foreach($sponsors_list as $s)
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; margin-bottom: 5px;">
+                    <span style="font-size: 0.85rem;">{{ $s->nombre }} ({{ $s->nivel }})</span>
+                    <form action="{{ route('admin.sponsor.delete', $s->id) }}" method="POST" onsubmit="return confirm('¿Eliminar patrocinador?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" style="background: none; border: none; color: #ff4d4d; cursor: pointer;"><i class="fa-solid fa-trash-can"></i></button>
+                    </form>
+                </div>
+            @endforeach
         </div>
 
     </div>
 
+    <script>
+    function toggleTipo() {
+        const tipo = document.getElementById('tipo_encuentro').value;
+        document.getElementById('campo_rival').style.display = tipo === 'partido' ? 'block' : 'none';
+        document.getElementById('campo_logo').style.display = tipo === 'partido' ? 'block' : 'none';
+        document.getElementById('campo_torneo').style.display = tipo === 'torneo' ? 'block' : 'none';
+    }
+    </script>
 </body>
 </html>

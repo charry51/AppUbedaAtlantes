@@ -1,172 +1,162 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Blog y Noticias - Úbeda Atlantes')
 
-    <!-- SEO Básico -->
-    <meta name="description"
-        content="Noticias, resultados y crónicas de los partidos del Club de Rugby Úbeda Atlantes. Entérate de toda la actualidad de nuestro equipo en Jaén.">
-    <meta name="keywords"
-        content="blog rugby, noticias rugby úbeda, crónicas rugby, actualidad ubeda atlantes, liga rugby jaen, andalucia">
+@section('seo')
+    <meta name="description" content="Noticias, resultados y crónicas de los partidos del Club de Rugby Úbeda Atlantes. Entérate de toda la actualidad de nuestro equipo en Jaén.">
+    <meta name="keywords" content="blog rugby, noticias rugby úbeda, crónicas rugby, actualidad ubeda atlantes, liga rugby jaen, andalucia">
     <meta name="author" content="Club de Rugby Úbeda Atlantes">
     <meta name="robots" content="index, follow">
 
-    <!-- Open Graph / Redes Sociales -->
     <meta property="og:title" content="Blog y Noticias - Úbeda Atlantes">
-    <meta property="og:description"
-        content="Noticias, resultados y crónicas de los partidos del Club de Rugby Úbeda Atlantes. Entérate de toda la actualidad de nuestro equipo en Jaén.">
+    <meta property="og:description" content="Noticias, resultados y crónicas de los partidos del Club de Rugby Úbeda Atlantes. Entérate de toda la actualidad de nuestro equipo en Jaén.">
     <meta property="og:image" content="{{ asset('images/principal.jpg') }}">
     <meta property="og:url" content="{{ route('blog') }}">
     <meta property="og:type" content="website">
 
-    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Blog y Noticias - Úbeda Atlantes">
-    <meta name="twitter:description"
-        content="Noticias, resultados y crónicas de los partidos del Club de Rugby Úbeda Atlantes. Entérate de toda la actualidad de nuestro equipo en Jaén.">
+    <meta name="twitter:description" content="Noticias, resultados y crónicas de los partidos del Club de Rugby Úbeda Atlantes. Entérate de toda la actualidad de nuestro equipo en Jaén.">
     <meta name="twitter:image" content="{{ asset('images/principal.jpg') }}">
 
     <link rel="canonical" href="{{ route('blog') }}">
+@endsection
 
-    <title>Blog - Úbeda Atlantes</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Oswald:wght@500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@section('nav-blog', 'active')
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-</head>
+@section('styles')
+<style>
+    /* ESTILO MASONRY (MURO ADAPTATIVO TIPO PINTEREST) */
+    .masonry-grid {
+        column-count: 3;
+        column-gap: 30px;
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+    
+    .masonry-item {
+        break-inside: avoid;
+        margin-bottom: 30px;
+        background: var(--bg-secundario);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease;
+    }
 
-<body>
+    .masonry-item:hover {
+        transform: translateY(-5px);
+    }
 
-    <nav class="navbar">
-        <a href="{{ url('/') }}"><img src="{{ asset('images/logo.png') }}" alt="Escudo Atlantes" class="nav-logo"></a>
-        <button class="menu-toggle" id="menu-toggle"><i class="fa-solid fa-bars"></i></button>
+    .masonry-img {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+    }
 
-        <div class="nav-links" id="nav-links">
-            <a href="{{ url('/') }}#valores">El Club</a>
-            <a href="{{ route('blog') }}" style="color: var(--rojo-pasion);">Blog</a>
-            <a href="{{ route('galeria') }}">Galería</a>
-            <a href="{{ url('/') }}#horarios">Horarios</a>
-            <a href="{{ url('/') }}#contacto" class="btn-nav">¡Apúntate!</a>
-        </div>
-        <div class="social-icons">
-            <button id="btn-tema" class="btn-tema" title="Cambiar modo"><i class="fa-solid fa-sun"
-                    id="icono-tema"></i></button>
-        </div>
-    </nav>
+    .masonry-img:hover {
+        opacity: 0.8;
+    }
 
-    <header class="blog-header">
-        <h1><i class="fa-solid fa-newspaper" style="color: var(--rojo-pasion);"></i> LA CRÓNICA DEL CLUB</h1>
+    /* Adaptación a móviles */
+    @media (max-width: 900px) { .masonry-grid { column-count: 2; } }
+    @media (max-width: 600px) { .masonry-grid { column-count: 1; } }
+
+    /* ESTILOS DEL MODAL (PANTALLA COMPLETA PARA LA FOTO) */
+    .modal-galeria {
+        display: none; 
+        position: fixed; 
+        z-index: 9999; 
+        padding-top: 50px; 
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        height: 100%; 
+        background-color: rgba(0,0,0,0.9);
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .modal-contenido {
+        max-width: 90%;
+        max-height: 80vh;
+        border-radius: 4px;
+        box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        object-fit: contain;
+    }
+
+    .cerrar-modal {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .cerrar-modal:hover { color: var(--rojo-pasion); }
+</style>
+@endsection
+
+@section('content')
+    <section class="hero" style="--bg-img: url('{{ asset('images/principal.jpg') }}'); min-height: 40vh;">
+        <h1 style="text-transform: uppercase; font-size: 3rem;"><i class="fa-solid fa-newspaper"></i> LA CRÓNICA DEL CLUB</h1>
         <p>Noticias, resultados y el día a día del Úbeda Atlantes.</p>
-    </header>
+    </section>
 
-    <main class="blog-grid">
-        @php
-            // Definimos los 4 layouts posibles: por defecto, invertido, horizontal y grande
-            $layouts = ['default', 'layout-reverse', 'layout-alt', 'layout-large'];
-        @endphp
-
-        @forelse($posts as $post)
-        @php
-            // Seleccionamos un layout de forma determinista según el ID del post
-            // para que cada noticia mantenga siempre el mismo formato
-            $layoutIndex = $post->id % count($layouts);
-            $postLayout = $layouts[$layoutIndex];
-        @endphp
-        <article class="post-card {{ $postLayout }}">
-            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="post-img">
-            <div class="post-content">
-                <span class="post-date"><i class="fa-regular fa-calendar"></i> {{ $post->created_at->format('d/m/Y')
-                    }}</span>
-                <h2 class="post-title">{{ $post->title }}</h2>
-                <p class="post-text">{{ $post->content }}</p>
+    <section style="min-height: 40vh;">
+        @if($posts->count() > 0)
+            <div class="masonry-grid">
+                @foreach($posts as $post)
+                    <div class="masonry-item">
+                        <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="masonry-img" onclick="abrirModal('{{ asset('storage/' . $post->image) }}')">
+                        
+                        <div style="padding: 20px; display: flex; flex-direction: column;">
+                            <span style="color: var(--rojo-pasion); font-size: 0.85rem; font-weight: bold; margin-bottom: 10px;"><i class="fa-regular fa-calendar"></i> {{ $post->created_at->format('d/m/Y') }}</span>
+                            <h2 style="margin-top: 0; margin-bottom: 10px; color: var(--texto-principal); font-family: 'Oswald', sans-serif; font-size: 1.5rem;">{{ $post->title }}</h2>
+                            <p style="color: var(--texto-secundario); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;">
+                                {{ $post->content }}
+                            </p>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        </article>
-        @empty
-        <div class="blog-empty">
-            <h2><i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 20px;"></i></h2>
-            <h2>AÚN NO HAY NOTICIAS</h2>
-            <p>El Míster todavía no ha publicado ninguna crónica de partido.</p>
-        </div>
-        @endforelse
-    </main>
-
-    <footer class="footer-club">
-        <div class="footer-container">
-            <div class="footer-col">
-                <h3>DÓNDE ESTAMOS</h3>
-                <p><strong>Entrenamientos:</strong><br>Polideportivo Municipal Antonio Cruz Sánchez<br>Úbeda, Jaén</p>
-
-                <div class="social-footer">
-                    <a href="https://www.facebook.com/UbedaAtlantesRugbyClub?locale=es_ES" target="_blank"><i
-                            class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/rugbyubedaatlantes/" target="_blank"><i
-                            class="fa-brands fa-instagram"></i></a>
-                    <a href="https://www.youtube.com/@ubedaatlantes" target="_blank" title="Canal de YouTube"><i
-                            class="fa-brands fa-youtube"></i></a>
-                </div>
+            
+            <div style="margin-top: 40px; margin-bottom: 60px; display: flex; justify-content: center;">
+                {{ $posts->links() }}
             </div>
-
-            <div class="footer-col">
-                <h3>CONTACTO Y LEGAL</h3>
-                <p><strong>Teléfono:</strong> 652 02 77 84</p>
-                <ul class="footer-links">
-                    <li><a href="{{ route('privacidad') }}">Política de Privacidad</a></li>
-                    <li><a href="{{ route('aviso-legal') }}">Aviso Legal</a></li>
-                    <li><a href="{{ route('cookies') }}">Política de Cookies</a></li>
-                    <li><a href="{{ route('documentacion') }}" class="link-destacado"><i
-                                class="fa-solid fa-file-lines"></i> Documentación del Proyecto</a></li>
-                </ul>
+        @else
+            <div style="text-align: center; max-width: 800px; margin: 60px auto; padding: 60px 20px; border: 2px dashed var(--borde-color); border-radius: 8px;">
+                <i class="fa-regular fa-folder-open" style="font-size: 4rem; color: var(--texto-secundario); margin-bottom: 20px;"></i>
+                <h2 style="color: var(--texto-principal);">AÚN NO HAY NOTICIAS</h2>
+                <p style="color: var(--texto-secundario);">El Míster todavía no ha publicado ninguna crónica de partido.</p>
             </div>
-        </div>
-        <div
-            style="text-align: center; padding: 20px 10px; font-size: 14px; color: #aaa; background-color: #111; margin-top: 40px; border-top: 1px solid #333;">
-            <p style="margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                Diseño y Desarrollo Web por
-                <a href="https://www.linkedin.com/in/fcharriel" target="_blank"
-                    style="color: #08d7ea; text-decoration: none; font-weight: bold; transition: color 0.3s ease; display: inline-flex; align-items: center; gap: 8px;">
-                    Francisco Charriel
-                    <img src="{{ asset('images/Milogo.png') }}" alt="Logo Francisco Charriel"
-                        style="height: 24px; width: auto; object-fit: contain;">
-                </a>
-            </p>
-        </div>
-    </footer>
+        @endif
+    </section>
 
-    <script>
-        const btnTema = document.getElementById('btn-tema');
-        const iconoTema = document.getElementById('icono-tema');
-        const cuerpoWeb = document.body;
+    <div id="modalGaleria" class="modal-galeria">
+        <span class="cerrar-modal" onclick="cerrarModal()">&times;</span>
+        <img class="modal-contenido" id="imgModal">
+    </div>
+@endsection
 
-        if (localStorage.getItem('temaElegido') === 'claro') {
-            cuerpoWeb.classList.add('modo-claro');
-            iconoTema.classList.replace('fa-sun', 'fa-moon');
-        }
-
-        btnTema.addEventListener('click', () => {
-            cuerpoWeb.classList.toggle('modo-claro');
-            if (cuerpoWeb.classList.contains('modo-claro')) {
-                localStorage.setItem('temaElegido', 'claro');
-                iconoTema.classList.replace('fa-sun', 'fa-moon');
-            } else {
-                localStorage.setItem('temaElegido', 'oscuro');
-                iconoTema.classList.replace('fa-moon', 'fa-sun');
-            }
-        });
-
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const iconoMenu = menuToggle.querySelector('i');
-            iconoMenu.classList.toggle('fa-bars');
-            iconoMenu.classList.toggle('fa-xmark');
-        });
-    </script>
-</body>
-
-</html>
+@section('scripts')
+<script>
+    function abrirModal(src) {
+        document.getElementById("modalGaleria").style.display = "flex";
+        document.getElementById("imgModal").src = src;
+    }
+    function cerrarModal() { document.getElementById("modalGaleria").style.display = "none"; }
+    window.onclick = function(e) { if(e.target == document.getElementById("modalGaleria")) cerrarModal(); }
+    document.addEventListener('keydown', function(e){ if(e.key === "Escape") cerrarModal(); });
+</script>
+@endsection
