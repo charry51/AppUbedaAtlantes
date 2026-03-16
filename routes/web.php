@@ -122,3 +122,13 @@ Route::get('/ver-foto/{path}', function ($path) {
     
     return response()->file($fullPath);
 })->where('path', '.*')->name('foto.directa');
+
+Route::get('/fuerza-link', function () {
+    $target = storage_path('app/public');
+    $link = public_path('storage');
+    if (file_exists($link)) {
+        return "El enlace ya existe. Prueba a borrar la carpeta 'storage' dentro de 'public' por FTP/Administrador de archivos y refresca esta ruta.";
+    }
+    symlink($target, $link);
+    return "¡Puente de fotos creado con éxito!";
+});
