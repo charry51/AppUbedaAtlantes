@@ -14,7 +14,9 @@ use App\Models\Sponsor;
 
 class AdminController extends Controller
 {
-    // 1. Panel Principal
+    /**
+     * PANEL PRINCIPAL: Lista de Reclutas
+     */
     public function index()
     {
         $contactos = Contact::orderBy('created_at', 'desc')->get();
@@ -22,7 +24,7 @@ class AdminController extends Controller
     }
 
     // ----------------------------------------------------
-    // GESTIÓN DE PARTIDOS
+    // GESTIÓN DE ENCUENTROS (PARTIDOS / TORNEOS)
     // ----------------------------------------------------
     public function guardarPartido(Request $request)
     {
@@ -32,6 +34,7 @@ class AdminController extends Controller
             'nombre_torneo' => 'required_if:tipo,torneo|nullable|string',
             'fecha' => 'required',
             'lugar' => 'required|string',
+            'rival_logo' => 'nullable|image|max:2048',
         ]);
 
         $rutaLogo = null;
@@ -49,7 +52,7 @@ class AdminController extends Controller
             'rival_logo' => $rutaLogo,
         ]);
 
-        return redirect()->back()->with(['success' => 'Encuentro actualizado', 'partido_ok' => true]);
+        return redirect()->back()->with(['success' => 'Encuentro publicado correctamente', 'partido_ok' => true]);
     }
 
     public function editPartido($id) {
@@ -59,13 +62,13 @@ class AdminController extends Controller
 
     public function updatePartido(Request $request, $id) {
         $partido = Game::findOrFail($id);
+        
         if ($request->hasFile('rival_logo')) {
             if ($partido->rival_logo) Storage::disk('public')->delete($partido->rival_logo);
             $partido->rival_logo = $request->file('rival_logo')->store('rivales', 'public');
         }
-        $partido->update($request->except('rival_logo')); // Actualiza todo menos el logo que ya lo hemos gestionado
-        
-        // El checkbox de local se gestiona aparte porque si no se marca no viene en el request
+
+        $partido->update($request->except('rival_logo'));
         $partido->es_local = $request->has('es_local');
         $partido->save();
 
@@ -77,21 +80,11 @@ class AdminController extends Controller
         $game = Game::findOrFail($id);
         if ($game->rival_logo) Storage::disk('public')->delete($game->rival_logo);
         $game->delete();
-        return redirect()->back()->with('success', 'Partido eliminado correctamente');
+        return redirect()->back()->with('success', 'Partido eliminado del calendario');
     }
 
     // ----------------------------------------------------
-    // GESTIÓN DE RECLUTAS
-    // ----------------------------------------------------
-    public function eliminarRecluta($id)
-    {
-        $recluta = Contact::findOrFail($id);
-        $recluta->delete();
-        return back()->with('success', 'Recluta gestionado y eliminado.');
-    }
-
-    // ----------------------------------------------------
-    // LÓGICA DEL BLOG
+    // GESTIÓN DE BLOG (NOTICIAS Y CRÓNICAS)
     // ----------------------------------------------------
     public function guardarPost(Request $request)
     {
@@ -109,7 +102,7 @@ class AdminController extends Controller
             'image'   => $rutaImagen,
         ]);
 
-        return back()->with('success', '¡Noticia publicada con éxito!');
+        return back()->with('success', '¡Noticia publicada en el Blog!');
     }
 
     public function editPost($id) {
@@ -127,7 +120,7 @@ class AdminController extends Controller
         }
 
         $post->update(['title' => $request->title, 'content' => $request->content]);
-        return redirect()->route('admin.dashboard')->with('success', 'Crónica actualizada');
+        return redirect()->route('admin.dashboard')->with('success', 'Crónica editada correctamente');
     }
 
     public function eliminarPost($id)
@@ -135,14 +128,15 @@ class AdminController extends Controller
         $post = Post::findOrFail($id);
         if ($post->image) Storage::disk('public')->delete($post->image);
         $post->delete();
-        return redirect()->back()->with('success', 'Crónica eliminada');
+        return redirect()->back()->with('success', 'Crónica eliminada permanentemente');
     }
 
     // ----------------------------------------------------
-    // LÓGICA DE LA GALERÍA
+    // GESTIÓN DE GALERÍA (ÁLBUMES Y FOTOS)
     // ----------------------------------------------------
     public function guardarFotos(Request $request)
     {
+        // Ampliamos límites para evitar timeouts en subidas pesadas
         ini_set('max_execution_time', 300); 
         ini_set('memory_limit', '512M');
         
@@ -152,46 +146,50 @@ class AdminController extends Controller
             'photos.*'    => 'required|image|max:10240', // Max 10MB por foto
         ]);
 
+        // 1. Gestionar Temporada
         $temporada = Season::firstOrCreate(['name' => $request->season_name]);
+        
+        // 2. Gestionar Evento (Álbum)
         $evento = Event::firstOrCreate([
             'season_id' => $temporada->id,
             'name'      => $request->event_name,
         ]);
 
+        // 3. Subida de archivos
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $foto) {
                 $rutaFoto = $foto->store('galeria', 'public');
                 Photo::create([
-                    'event_id'   => $evento->id,
-                    'path' => $rutaFoto, // Cambiado de image_path a path para coincidir con tu BD
+                    'event_id' => $evento->id,
+                    'path'     => $rutaFoto, 
                 ]);
             }
         }
 
-        return back()->with('success', '¡Álbum guardado con éxito!');
+        return back()->with('success', '¡Álbum subido con éxito!');
     }
 
     // ----------------------------------------------------
-    // LÓGICA DE PATROCINADORES
+    // GESTIÓN DE PATROCINADORES
     // ----------------------------------------------------
     public function guardarPatrocinador(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'logo' => 'required|image|max:2048',
-            'nivel' => 'required|string',
+            'logo'   => 'required|image|max:2048',
+            'nivel'  => 'required|string',
         ]);
 
         $rutaLogo = $request->file('logo')->store('sponsors', 'public');
 
         Sponsor::create([
             'nombre' => $request->nombre,
-            'logo' => $rutaLogo,
+            'logo'   => $rutaLogo,
             'enlace' => $request->enlace,
-            'nivel' => $request->nivel,
+            'nivel'  => $request->nivel,
         ]);
 
-        return redirect()->back()->with('success', '¡Patrocinador fichado!');
+        return redirect()->back()->with('success', '¡Nuevo patrocinador fichado!');
     }
 
     public function editSponsor($id) {
@@ -201,12 +199,14 @@ class AdminController extends Controller
 
     public function updateSponsor(Request $request, $id) {
         $sponsor = Sponsor::findOrFail($id);
+        
         if ($request->hasFile('logo')) {
             if ($sponsor->logo) Storage::disk('public')->delete($sponsor->logo);
             $sponsor->logo = $request->file('logo')->store('sponsors', 'public');
         }
+        
         $sponsor->update($request->only(['nombre', 'nivel', 'enlace']));
-        return redirect()->route('admin.dashboard')->with('success', 'Patrocinador actualizado');
+        return redirect()->route('admin.dashboard')->with('success', 'Datos del patrocinador actualizados');
     }
 
     public function eliminarSponsor($id)
@@ -215,5 +215,15 @@ class AdminController extends Controller
         if ($sponsor->logo) Storage::disk('public')->delete($sponsor->logo);
         $sponsor->delete();
         return redirect()->back()->with('success', 'Patrocinador eliminado');
+    }
+
+    // ----------------------------------------------------
+    // GESTIÓN DE RECLUTAS
+    // ----------------------------------------------------
+    public function eliminarRecluta($id)
+    {
+        $recluta = Contact::findOrFail($id);
+        $recluta->delete();
+        return back()->with('success', 'Recluta gestionado y archivado.');
     }
 }
