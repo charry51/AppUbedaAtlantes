@@ -160,9 +160,9 @@ class AdminController extends Controller
             foreach ($request->file('photos') as $foto) {
                 $rutaFoto = $foto->store('galeria', 'public');
                 Photo::create([
-                    'event_id' => $evento->id,
-                    'path'     => $rutaFoto, 
-                ]);
+    'event_id'   => $evento->id,
+    'image_path' => $rutaFoto, 
+]);
             }
         }
 
