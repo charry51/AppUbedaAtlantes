@@ -31,18 +31,23 @@ class HomeController extends Controller
         return view('welcome', compact('nextGame', 'upcomingGames'));
     }
 
-    public function galeria(Request $request)
-{
-    // Traemos temporadas y eventos con sus fotos
-    $seasons = \App\Models\Season::orderBy('created_at', 'desc')->get();
-    $query = \App\Models\Event::with('photos', 'season');
+    public function galeria(\Illuminate\Http\Request $request)
+    {
+        // Traemos todas las temporadas para pintar el desplegable
+        $seasons = \App\Models\Season::orderBy('name', 'desc')->get();
 
-    if ($request->has('temporada')) {
-        $query->where('season_id', $request->temporada);
+        // Preparamos la consulta de eventos con sus fotos
+        $query = \App\Models\Event::with('photos');
+
+        // Si el usuario selecciona una temporada en el desplegable, filtramos
+        if ($request->filled('season_id')) {
+            $query->where('season_id', $request->season_id);
+        }
+
+        // Ejecutamos la búsqueda (ordenando del más nuevo al más antiguo)
+        $events = $query->orderBy('created_at', 'desc')->get();
+
+        // Enviamos las variables a la vista
+        return view('galeria', compact('events', 'seasons'));
     }
-
-    $events = $query->orderBy('created_at', 'desc')->get();
-
-    return view('galeria', compact('seasons', 'events'));
-}
 }
