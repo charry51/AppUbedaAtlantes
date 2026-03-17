@@ -44,12 +44,12 @@
 
     <div class="filtro-container">
         <form action="{{ route('galeria') }}" method="GET" id="filtroTemporada">
-            <label for="season_name" class="filtro-label">Filtrar por Temporada:</label>
-            <select name="season_name" id="season_name" class="filtro-select" onchange="document.getElementById('filtroTemporada').submit();">
+            <label for="season_id" class="filtro-label">Filtrar por Temporada:</label>
+            <select name="season_id" id="season_id" class="filtro-select" onchange="document.getElementById('filtroTemporada').submit();">
                 <option value="">Todas las temporadas</option>
                 @if(isset($seasons))
                     @foreach($seasons as $season)
-                        <option value="{{ $season->name }}" {{ request('season_name') == $season->name ? 'selected' : '' }}>
+                        <option value="{{ $season->id }}" {{ request('season_id') == $season->id ? 'selected' : '' }}>
                             {{ $season->name }}
                         </option>
                     @endforeach
