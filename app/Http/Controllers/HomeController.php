@@ -33,18 +33,18 @@ class HomeController extends Controller
 
     public function galeria(\Illuminate\Http\Request $request)
     {
+        // 1. Traemos las temporadas disponibles que tengan al menos un evento
         $seasons = \App\Models\Season::has('events')->orderBy('name', 'desc')->get();
+
+        // 2. Preparamos la consulta de eventos (solo los que tienen fotos)
         $query = \App\Models\Event::with('photos')->has('photos');
 
-        // Si el usuario elige temporada...
+        // 3. FILTRO CORRECTO: Filtramos por el ID numérico que nos manda el <select>
         if ($request->filled('season_id')) {
-            
-            // 🚨 BOTÓN NUCLEAR: Si entra aquí, la web se parará y mostrará este mensaje
-            // dd("¡Míster, sí entro al filtro! El ID que me pides es el: " . $request->season_id);
-            
             $query->where('season_id', $request->season_id);
         }
 
+        // 4. Ejecutamos la consulta ordenando por fecha
         $events = $query->orderBy('created_at', 'desc')->get();
 
         return view('galeria', compact('events', 'seasons'));
