@@ -170,15 +170,21 @@
 
         <div class="caja-admin">
             <h2><i class="fa-solid fa-camera-retro"></i> Galería de Fotos</h2>
-            <form action="{{ route('admin.photo.store') }}" method="POST" enctype="multipart/form-data">
+            
+            <form id="form-galeria" action="{{ route('admin.photo.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group"><label>TEMPORADA</label><input type="text" name="season_name" required placeholder="2025-2026"></div>
-                <div class="form-group"><label>EVENTO</label><input type="text" name="event_name" required></div>
+                <div class="form-group"><label>TEMPORADA</label><input type="text" name="season_name" id="season_name" required placeholder="Ej: 2025-2026"></div>
+                <div class="form-group"><label>EVENTO</label><input type="text" name="event_name" id="event_name" required placeholder="Ej: Torneo Jaén"></div>
                 <div class="form-group">
                     <label>FOTOS</label>
-                    <input type="file" name="photos[]" multiple required accept="image/*">
+                    <input type="file" id="fotos_input" multiple required accept="image/*">
                 </div>
-                <button type="submit" class="btn-submit" style="background-color: #08d7ea; color: #000;">SUBIR ÁLBUM</button>
+                
+                <button type="submit" id="btn-subir-fotos" class="btn-submit" style="background-color: #08d7ea; color: #000;">SUBIR ÁLBUM <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                
+                <div id="progreso-container" style="display: none; margin-top: 15px; background: #222; border-radius: 4px; border: 1px solid #08d7ea; overflow: hidden;">
+                    <div id="barra-progreso" style="width: 0%; height: 25px; background: #08d7ea; transition: width 0.3s; text-align: center; color: #000; font-family: 'Oswald', sans-serif; font-weight: bold; line-height: 25px; white-space: nowrap;">0%</div>
+                </div>
             </form>
         </div>
 
@@ -236,13 +242,62 @@
     }
 
     function verMensaje(mensaje) {
-        // Si hay mensaje lo pintamos, si no, avisamos
         let texto = mensaje ? mensaje : 'Este recluta no ha dejado ningún mensaje, solo dejó sus datos.';
-        
-        // Lo metemos en el Modal y lo hacemos visible
         document.getElementById('textoMensajeAdmin').innerText = texto;
         document.getElementById('modalMensajeAdmin').style.display = 'flex';
     }
+
+    // SCRIPT DEL SÚPER-SUBIDOR SECUENCIAL
+    document.getElementById('form-galeria').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Cortamos el envío tradicional
+
+        const btn = document.getElementById('btn-subir-fotos');
+        const seasonName = document.getElementById('season_name').value;
+        const eventName = document.getElementById('event_name').value;
+        const files = document.getElementById('fotos_input').files;
+        const token = document.querySelector('input[name="_token"]').value;
+        const url = this.action;
+
+        if(files.length === 0) return;
+
+        // Bloqueamos botón y mostramos barra
+        btn.disabled = true;
+        btn.innerText = 'SUBIENDO... NO CIERRES LA PÁGINA';
+        document.getElementById('progreso-container').style.display = 'block';
+        const barra = document.getElementById('barra-progreso');
+
+        let subidasExitosas = 0;
+
+        // Bucle mágico: Enviar fotos de 1 en 1
+        for (let i = 0; i < files.length; i++) {
+            const formData = new FormData();
+            formData.append('_token', token);
+            formData.append('season_name', seasonName);
+            formData.append('event_name', eventName);
+            formData.append('photo', files[i]); // Singular
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    subidasExitosas++;
+                    const porcentaje = Math.round((subidasExitosas / files.length) * 100);
+                    barra.style.width = porcentaje + '%';
+                    barra.innerText = subidasExitosas + ' de ' + files.length + ' (' + porcentaje + '%)';
+                }
+            } catch (error) {
+                console.error("Fallo al subir foto", i);
+            }
+        }
+
+        // Finalizar y recargar
+        btn.innerText = '¡ÁLBUM COMPLETADO!';
+        setTimeout(() => location.reload(), 1500);
+    });
     </script>
 </body>
 </html>

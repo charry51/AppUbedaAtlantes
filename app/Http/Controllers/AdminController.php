@@ -132,41 +132,31 @@ class AdminController extends Controller
     }
 
     // ----------------------------------------------------
-    // GESTIÓN DE GALERÍA (ÁLBUMES Y FOTOS)
+    // GESTIÓN DE GALERÍA (LA NUEVA SUBIDA SECUENCIAL)
     // ----------------------------------------------------
     public function guardarFotos(Request $request)
     {
-        // Ampliamos límites para evitar timeouts en subidas pesadas
-        ini_set('max_execution_time', 300); 
-        ini_set('memory_limit', '512M');
-        
-        $request->validate([
-            'season_name' => 'required|string|max:100',
-            'event_name'  => 'required|string|max:200',
-            'photos.*'    => 'required|image|max:10240', // Max 10MB por foto
+        // 1. Buscamos la temporada o la creamos si es nueva
+        $season = \App\Models\Season::firstOrCreate(['name' => $request->season_name]);
+
+        // 2. Buscamos el evento dentro de esa temporada o lo creamos
+        $event = \App\Models\Event::firstOrCreate([
+            'name' => $request->event_name,
+            'season_id' => $season->id
         ]);
 
-        // 1. Gestionar Temporada
-        $temporada = Season::firstOrCreate(['name' => $request->season_name]);
-        
-        // 2. Gestionar Evento (Álbum)
-        $evento = Event::firstOrCreate([
-            'season_id' => $temporada->id,
-            'name'      => $request->event_name,
-        ]);
-
-        // 3. Subida de archivos
-        if ($request->hasFile('photos')) {
-            foreach ($request->file('photos') as $foto) {
-                $rutaFoto = $foto->store('galeria', 'public');
-                Photo::create([
-    'event_id'   => $evento->id,
-    'image_path' => $rutaFoto, 
-]);
-            }
+        // 3. Guardamos LA foto individual que nos acaba de mandar el Javascript
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('galeria', 'public');
+            
+            \App\Models\Photo::create([
+                'event_id' => $event->id,
+                'image_path' => $path
+            ]);
         }
 
-        return back()->with('success', '¡Álbum subido con éxito!');
+        // 4. Devolvemos un OK silencioso para que la barra de progreso avance
+        return response()->json(['success' => true]);
     }
 
     // ----------------------------------------------------
