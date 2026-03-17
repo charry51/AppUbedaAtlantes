@@ -46,16 +46,12 @@
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 
-                <div class="evento-contenido" id="contenido-{{ $event->id }}">
+                <div class="evento-contenido abierto" id="contenido-{{ $event->id }}">
                     <div class="fotos-grid">
                         @foreach($event->photos as $photo)
-                            @if($photo->path)
-                                @php 
-                                    // Preparamos la URL para el túnel (cambiamos / por -)
-                                    $fotoUrl = route('foto.directa', ['path' => str_replace('/', '-', $photo->path)]);
-                                @endphp
-                                <div class="foto-item" onclick="verFoto('{{ $fotoUrl }}')">
-                                    <img src="{{ $fotoUrl }}" alt="Rugby Úbeda Atlantes" loading="lazy">
+                            @if($photo->image_path)
+                                <div class="foto-item" onclick="verFoto('{{ asset('storage/' . $photo->image_path) }}')">
+                                    <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Rugby Úbeda Atlantes" loading="lazy">
                                 </div>
                             @endif
                         @endforeach
