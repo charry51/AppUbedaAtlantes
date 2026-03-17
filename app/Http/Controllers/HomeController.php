@@ -33,21 +33,20 @@ class HomeController extends Controller
 
     public function galeria(\Illuminate\Http\Request $request)
     {
-        // Traemos todas las temporadas para pintar el desplegable
-        $seasons = \App\Models\Season::orderBy('name', 'desc')->get();
+        // 1. Traemos las temporadas para llenar el desplegable
+        $seasons = \App\Models\Season::has('events')->orderBy('name', 'desc')->get();
 
-        // Preparamos la consulta de eventos con sus fotos
-        $query = \App\Models\Event::with('photos');
+        // 2. Empezamos a preparar la lista de eventos
+        $query = \App\Models\Event::with('photos')->has('photos');
 
-        // Si el usuario selecciona una temporada en el desplegable, filtramos
-        if ($request->filled('season_id')) {
+        // 3. EL FILTRO CLAVE: Si hay una temporada seleccionada, filtramos la consulta
+        if ($request->has('season_id') && $request->season_id != '') {
             $query->where('season_id', $request->season_id);
         }
 
-        // Ejecutamos la búsqueda (ordenando del más nuevo al más antiguo)
+        // 4. Ejecutamos la búsqueda final ordenada por fecha
         $events = $query->orderBy('created_at', 'desc')->get();
 
-        // Enviamos las variables a la vista
         return view('galeria', compact('events', 'seasons'));
     }
 }
