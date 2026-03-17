@@ -51,7 +51,11 @@
                                 <td style="font-weight: bold;">{{ $recluta->name }}</td>
                                 <td>{{ $recluta->age ?? '-' }}</td>
                                 <td>
-                                    <div class="acciones-flex">
+                                    <div class="acciones-flex" style="display: flex; gap: 5px; align-items: center;">
+                                        <button type="button" onclick='verMensaje(@json($recluta->message))' style="background: #17a2b8; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;" title="Ver mensaje">
+                                            <i class="fa-solid fa-envelope"></i>
+                                        </button>
+
                                         <a href="https://wa.me/34{{ str_replace(' ', '', $recluta->phone) }}" target="_blank" class="btn-whatsapp">
                                             <i class="fa-brands fa-whatsapp"></i>
                                         </a>
@@ -211,12 +215,33 @@
 
     </div>
 
+    <div id="modalMensajeAdmin" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center;">
+        <div style="background: #1a1a1a; padding: 25px; border-radius: 8px; border: 1px solid #c91028; max-width: 500px; width: 90%; color: white;">
+            <h3 style="margin-top: 0; color: #c91028; font-family: 'Oswald', sans-serif; text-transform: uppercase;">Mensaje del Recluta</h3>
+            
+            <p id="textoMensajeAdmin" style="white-space: pre-wrap; margin-bottom: 25px; line-height: 1.5; font-size: 1rem; color: #ddd; background: #000; padding: 15px; border-radius: 4px; border: 1px solid #333;"></p>
+            
+            <div style="text-align: right;">
+                <button type="button" onclick="document.getElementById('modalMensajeAdmin').style.display='none'" style="background: #c91028; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-family: 'Oswald', sans-serif; text-transform: uppercase;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
     function toggleTipo() {
         const tipo = document.getElementById('tipo_encuentro').value;
         document.getElementById('campo_rival').style.display = tipo === 'partido' ? 'block' : 'none';
         document.getElementById('campo_logo').style.display = tipo === 'partido' ? 'block' : 'none';
         document.getElementById('campo_torneo').style.display = tipo === 'torneo' ? 'block' : 'none';
+    }
+
+    function verMensaje(mensaje) {
+        // Si hay mensaje lo pintamos, si no, avisamos
+        let texto = mensaje ? mensaje : 'Este recluta no ha dejado ningún mensaje, solo dejó sus datos.';
+        
+        // Lo metemos en el Modal y lo hacemos visible
+        document.getElementById('textoMensajeAdmin').innerText = texto;
+        document.getElementById('modalMensajeAdmin').style.display = 'flex';
     }
     </script>
 </body>
