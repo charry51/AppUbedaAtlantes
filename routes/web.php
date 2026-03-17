@@ -62,35 +62,8 @@ Route::get('/blog', function () {
     return view('blog', compact('posts'));
 })->name('blog');
 
-Route::get('/galeria', function (Illuminate\Http\Request $request) {
-    // 1. Traemos las temporadas
-    $seasons = \App\Models\Season::orderBy('created_at', 'desc')->get();
-    
-    // 2. Miramos qué temporada ha elegido el usuario (o la última por defecto)
-    $selectedSeasonId = $request->input('temporada');
-
-    // 3. Preparamos la consulta de eventos (álbumes)
-    $query = \App\Models\Event::with('photos', 'season');
-
-    if ($selectedSeasonId && $selectedSeasonId !== 'antiguas') {
-        $query->where('season_id', $selectedSeasonId);
-    }
-
-    $events = $query->orderBy('created_at', 'desc')->get();
-
-    // 4. Lógica para fotos antiguas (si existe la carpeta)
-    $modoAntiguas = ($selectedSeasonId === 'antiguas');
-    $fotosAntiguas = [];
-    if ($modoAntiguas) {
-        $files = Storage::disk('public')->files('antiguas');
-        $fotosAntiguas = array_values(array_filter($files, function ($p) {
-            return preg_match('/\.(jpe?g|png|webp|gif)$/i', $p);
-        }));
-    }
-
-    // Enviamos EXACTAMENTE lo que la vista espera: $seasons y $events
-    return view('galeria', compact('seasons', 'events', 'modoAntiguas', 'fotosAntiguas', 'selectedSeasonId'));
-})->name('galeria');
+// ¡AQUÍ ESTÁ EL ARREGLO! Pasamos la pelota al HomeController
+Route::get('/galeria', [HomeController::class, 'galeria'])->name('galeria');
 
 // --- ZONA DE AUTENTICACIÓN (LOGIN) ---
 Route::get('/login', [AuthController::class , 'showLogin'])->name('login');
@@ -112,7 +85,7 @@ Route::middleware('auth')->group(function () {
 
 // Túnel de emergencia para ver las fotos si el storage:link falla en Mac
 Route::get('/ver-foto/{path}', function ($path) {
-    // Desacemos el cambio de guiones por barras
+    // Deshacemos el cambio de guiones por barras
     $path = str_replace('-', '/', $path);
     $fullPath = storage_path('app/public/' . $path);
     
