@@ -138,6 +138,53 @@
 
     @yield('scripts')
 
+    <a href="https://wa.me/34652027784?text=¡Hola!%20Me%20gustaría%20tener%20más%20información%20sobre%20el%20Úbeda%20Atlantes%20Rugby%20Club%20🏉" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       title="¡Escríbenos por WhatsApp!">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <style>
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 35px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #1ebe57;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* En móviles lo hacemos un pelín más pequeño y lo pegamos más al borde */
+        @media screen and (max-width: 767px) {
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 30px;
+            }
+        }
+    </style>
+
 </body>
 
 </html>
