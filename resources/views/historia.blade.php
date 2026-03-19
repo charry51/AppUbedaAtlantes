@@ -57,6 +57,11 @@
         <p>El primer día de entrenamiento llegaron cuarenta personas.</p>
         <p>Cuarenta. En una ciudad donde el rugby era prácticamente desconocido. Cuarenta personas que respondieron a un cartel pegado en una pared porque algo en ellas reconoció que aquello era diferente. Que aquello era suyo. Ese día nació el Club de Rugby Úbeda Atlantes.</p>
 
+        <div style="margin: 40px 0; text-align: center;">
+            <img src="{{ asset('images/historia_1.jpg') }}" alt="Primer equipo del Club de Rugby Úbeda Atlantes" style="width: 100%; max-width: 800px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 3px solid var(--rojo-pasion);">
+            <p style="font-style: italic; font-size: 0.9rem; color: #888; margin-top: 10px;">Una de las primeras fotografías del equipo en sus inicios.</p>
+        </div>
+
         <h2 style="color: var(--rojo-pasion); margin-top: 40px; margin-bottom: 20px; font-family: 'Oswald', sans-serif;">El nombre que lo explica todo</h2>
         <p>Cuando llegó el momento de elegir nombre, la respuesta estaba escrita literalmente en las paredes de la ciudad.</p>
         <p>Los atlantes son las figuras esculpidas en los palacios renacentistas de Úbeda —el Palacio de las Cadenas, la Sacra Capilla del Salvador, las joyas de piedra que hacen de esta ciudad un lugar único en el mundo— que sostienen cornisas y columnas sobre sus hombros. Figuras que no se rinden. Que aguantan. Que están ahí cuando el edificio necesita apoyo.</p>
@@ -79,6 +84,10 @@
         <h2 style="color: var(--rojo-pasion); margin-top: 40px; margin-bottom: 20px; font-family: 'Oswald', sans-serif;">Hoy: rugby en Jaén con historia, futuro y puertas abiertas</h2>
         <p>Más de una década después de aquellos primeros carteles pegados en las paredes de Úbeda, el club compite en la Liga Andaluza de Rugby, organiza torneos que trascienden la comarca de La Loma, y trabaja cada día para ser el referente del rugby en la provincia de Jaén.</p>
         <p>El camino no siempre fue fácil. Hubo temporadas de plantilla corta, de sumar kilómetros en coches prestados, de entrenar bajo la lluvia cuando el campo estaba en otro estado. Pero nadie se fue. Porque en el Atlantes, la razón para quedarse nunca fue ganar. Fue el de al lado.</p>
+
+        <div style="margin: 40px 0; text-align: center;">
+            <img src="{{ asset('images/historia_2.jpg') }}" alt="Jugadores del Atlantes en el campo" style="width: 100%; max-width: 800px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 3px solid var(--rojo-pasion);">
+        </div>
         <p>Si estás leyendo esto desde Úbeda, desde Baeza, desde Linares o desde cualquier rincón de Jaén, y algo dentro de ti está sintiendo que esto puede ser tuyo, escúchalo.</p>
         <p>Los atlantes de piedra de nuestros palacios llevan cinco siglos aguantando.</p>
         <p>Nosotros llevamos más de una década haciéndolo. Y no vamos a parar. ¿Quieres ser parte de esta historia? Entrena con nosotros. No necesitas experiencia. Solo ganas.</p>
